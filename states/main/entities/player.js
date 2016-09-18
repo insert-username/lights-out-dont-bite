@@ -1,3 +1,10 @@
+/**
+ * Defines the player character.
+ * The player can be in one of two states: Alive and Dead. If dead, the player will
+ * not respond to command input.
+ * The player state can be queried via function isAlive();
+ * The player can be damaged via function damage(amount);
+ */
 var LightsOut = (function(lightsOut){
 
   lightsOut.Player = function(game, x, y) {
@@ -20,6 +27,8 @@ var LightsOut = (function(lightsOut){
       left: game.input.keyboard.addKey(Phaser.Keyboard.A),
       right: game.input.keyboard.addKey(Phaser.Keyboard.D)
     };
+
+    this.health = 100;
   }
 
   lightsOut.Player.key = "player";
@@ -29,6 +38,14 @@ var LightsOut = (function(lightsOut){
 
   lightsOut.Player.prototype = Object.create(Phaser.Sprite.prototype);
   lightsOut.Player.prototype.constructor = lightsOut.Player;
+
+  lightsOut.Player.prototype.isAlive = function() {
+    return this.health > 0;
+  }
+
+  lightsOut.Player.prototype.damage = function(amount) {
+    this.health = Math.max(0, this.health - amount);
+  }
 
   lightsOut.Player.prototype.update = function() {
     var ddx = 0;
