@@ -14,9 +14,8 @@ var LightsOut = (function(lightsOut){
     var roomRight = x + width / 2;
     var roomBottom = y + height / 2;
 
-    var floor = game.add.tileSprite(roomLeft, roomTop, width, height, lightsOut.Room.key);
-    floor.z = lightsOut.ZDepth.FLOOR;
-    zDepthManager.floor.add(floor);
+    this.floor = game.add.tileSprite(roomLeft, roomTop, width, height, lightsOut.Room.key);
+    zDepthManager.floor.add(this.floor);
 
     this.walls = [
       // left wall
@@ -163,6 +162,13 @@ var LightsOut = (function(lightsOut){
    */
   lightsOut.Room.prototype.setUnlit = function(game) {
     this.setState(this.game, lightsOut.Room.State.UNLIT, 1000);
+  };
+
+  /**
+   * @return true if the room contains the specified point. 
+   */
+  lightsOut.Room.prototype.containsPoint = function(x, y) {
+    return this.floor.getBounds().contains(x, y);
   };
 
   /**

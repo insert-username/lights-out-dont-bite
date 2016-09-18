@@ -4,8 +4,9 @@
  */
 var LightsOut = (function(lightsOut){
 
-  lightsOut.Nasty = function(game, x, y) {
+  lightsOut.Nasty = function(game, rooms, x, y) {
     Phaser.Sprite.call(this, game, x, y, lightsOut.Nasty.key);
+    this.rooms = rooms;
   };
 
   lightsOut.Nasty.key = "nasty";
@@ -15,6 +16,10 @@ var LightsOut = (function(lightsOut){
 
   lightsOut.Nasty.prototype = Object.create(Phaser.Sprite.prototype);
   lightsOut.Nasty.prototype.constructor = lightsOut.Nasty;
+
+  lightsOut.Nasty.prototype.step = function(player) {
+    var distance = Phaser.Math.distance(this.x, this.y, player.x, player.y);
+  };
 
   return lightsOut;
 }(LightsOut || {}));

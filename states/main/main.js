@@ -37,7 +37,7 @@ var LightsOut = (function(lightsOut){
       });
       this.rooms = rooms;
 
-      this.nasty = new lightsOut.Nasty(game, mapFile.nasty.x, mapFile.nasty.y);
+      this.nasty = new lightsOut.Nasty(game, this.rooms, mapFile.nasty.x, mapFile.nasty.y);
       this.player = new lightsOut.Player(game, mapFile.player.x, mapFile.player.y);
       zDepth.sprite.add(this.nasty);
       zDepth.sprite.add(this.player);
@@ -48,6 +48,8 @@ var LightsOut = (function(lightsOut){
       this.rooms.forEach(function(room){
         room.collideWith(player);
       });
+
+      this.nasty.step(this.player);
     },
   };
 
