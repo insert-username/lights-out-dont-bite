@@ -5,10 +5,8 @@
  */
 var LightsOut = (function(lightsOut){
 
-  lightsOut.Room = function(game, x, y, width, height) {
+  lightsOut.Room = function(game, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC) {
     this.game = game;
-
-    var wallPC = 0.25;
 
     var roomLeft = x - width / 2;
     var roomTop = y - height / 2;
@@ -21,20 +19,20 @@ var LightsOut = (function(lightsOut){
     this.group.add(floor);
 
     // left wall
-    this.group.add(lightsOut.Room.makeVWallTop(game, height, roomLeft, roomTop, wallPC));
-    this.group.add(lightsOut.Room.makeVWallBottom(game, height, roomLeft, roomTop, wallPC));
+    this.group.add(lightsOut.Room.makeVWallTop(game, height, roomLeft, roomTop, doorLPC));
+    this.group.add(lightsOut.Room.makeVWallBottom(game, height, roomLeft, roomTop, doorLPC));
 
     // right wall
-    this.group.add(lightsOut.Room.makeVWallTop(game, height, roomRight - lightsOut.Room.wallWidth, roomTop, wallPC));
-    this.group.add(lightsOut.Room.makeVWallBottom(game, height, roomRight - lightsOut.Room.wallWidth, roomTop, wallPC));
+    this.group.add(lightsOut.Room.makeVWallTop(game, height, roomRight - lightsOut.Room.wallWidth, roomTop, doorRPC));
+    this.group.add(lightsOut.Room.makeVWallBottom(game, height, roomRight - lightsOut.Room.wallWidth, roomTop, doorRPC));
 
     // top wall
-    this.group.add(lightsOut.Room.makeHWallLeft(game, width, roomLeft, roomTop, wallPC));
-    this.group.add(lightsOut.Room.makeHWallRight(game, width, roomLeft, roomTop, wallPC));
+    this.group.add(lightsOut.Room.makeHWallLeft(game, width, roomLeft, roomTop, doorTPC));
+    this.group.add(lightsOut.Room.makeHWallRight(game, width, roomLeft, roomTop, doorTPC));
 
     // bottom wall
-    this.group.add(lightsOut.Room.makeHWallLeft(game, width, roomLeft, roomBottom - lightsOut.Room.wallWidth, wallPC));
-    this.group.add(lightsOut.Room.makeHWallRight(game, width, roomLeft, roomBottom - lightsOut.Room.wallWidth, wallPC));
+    this.group.add(lightsOut.Room.makeHWallLeft(game, width, roomLeft, roomBottom - lightsOut.Room.wallWidth, doorBPC));
+    this.group.add(lightsOut.Room.makeHWallRight(game, width, roomLeft, roomBottom - lightsOut.Room.wallWidth, doorBPC));
 
     /** 
      * The lighting for the room sets the level of visibility, an alpha value of 1.0 indicates an unlit room, 
@@ -76,8 +74,8 @@ var LightsOut = (function(lightsOut){
   };
 
   /** Factory function for creating a room group. */
-  lightsOut.Room.createRoom = function(game, x, y, width, height) {
-    return new lightsOut.Room(game, x, y, width, height);
+  lightsOut.Room.createRoom = function(game, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC) {
+    return new lightsOut.Room(game, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC);
   };
 
   /**

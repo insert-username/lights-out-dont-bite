@@ -5,24 +5,28 @@
 		"y": 100,
 		"w": 100,
 		"h": 100,
+		"doors": { "top" : 0, "bottom" : 0.3, "left" : 0, "right" : 0.3 },
 		"lit": true
 	}, {
 		"x": 100,
 		"y": 200,
 		"w": 100,
 		"h": 100,
+		"doors": { "top" : 0.3, "bottom" : 0, "left" : 0, "right" : 0.3 },
 		"lit": true
 	}, {
 		"x": 200,
 		"y": 100,
 		"w": 100,
 		"h": 100,
-		"lit": false
+		"doors": { "top" : 0, "bottom" : 0.3, "left" : 0.3, "right" : 0 },
+		"lit": true
 	}, {
 		"x": 200,
 		"y": 200,
 		"w": 100,
 		"h": 100,
+		"doors": { "top" : 0.3, "bottom" : 0, "left" : 0.3, "right" : 0 },
 		"lit": false
 	}]
 }

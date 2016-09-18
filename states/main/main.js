@@ -22,7 +22,8 @@ var LightsOut = (function(lightsOut){
 
       var rooms = [];
       mapFile.rooms.forEach(function(room) {
-        var newRoom = lightsOut.Room.createRoom(game, room.x, room.y, room.w, room.h);
+        var newRoom = lightsOut.Room.createRoom(game, room.x, room.y, room.w, room.h, 
+          room.doors.top, room.doors.bottom, room.doors.left, room.doors.right);
         if(room.lit) {
           newRoom.setLit();
         } else {
