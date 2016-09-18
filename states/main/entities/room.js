@@ -152,14 +152,14 @@ var LightsOut = (function(lightsOut){
    * Illuminates the room.
    */
   lightsOut.Room.prototype.setLit = function(game) {
-    this.setState(game, lightsOut.Room.State.LIT, 1000);
+    this.setState(this.game, lightsOut.Room.State.LIT, 1000);
   };
 
   /**
    * Sets the room to dark.
    */
   lightsOut.Room.prototype.setUnlit = function(game) {
-    this.setState(game, lightsOut.Room.State.UNLIT, 1000);
+    this.setState(this.game, lightsOut.Room.State.UNLIT, 1000);
   };
 
   /**
@@ -169,7 +169,7 @@ var LightsOut = (function(lightsOut){
     this.state = state;
 
     var lightingTween = game.add.tween(this);
-    lightingTween.to( { lightingAlphaMin: state * 0.9, lightingAlphaMax: state }, tweenTimeMs, Phaser.Easing.Linear.None);
+    lightingTween.to( { lightingAlphaMin: state * 0.95, lightingAlphaMax: state }, tweenTimeMs, Phaser.Easing.Linear.None);
     lightingTween.start();
   };
 
