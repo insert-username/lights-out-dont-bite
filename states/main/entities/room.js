@@ -5,7 +5,7 @@
  */
 var LightsOut = (function(lightsOut){
 
-  lightsOut.Room = function(game, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC) {
+  lightsOut.Room = function(game, zDepthManager, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC) {
     this.game = game;
 
     var roomLeft = x - width / 2;
@@ -15,33 +15,38 @@ var LightsOut = (function(lightsOut){
     var roomBottom = y + height / 2;
 
     var floor = game.add.tileSprite(roomLeft, roomTop, width, height, lightsOut.Room.key);
-    this.group = game.add.group();
-    this.group.add(floor);
+    floor.z = lightsOut.ZDepth.FLOOR;
+    zDepthManager.floor.add(floor);
 
-    // left wall
-    this.group.add(lightsOut.Room.makeVWallTop(game, height, roomLeft, roomTop, doorLPC));
-    this.group.add(lightsOut.Room.makeVWallBottom(game, height, roomLeft, roomTop, doorLPC));
+    this.walls = [
+      // left wall
+      lightsOut.Room.makeVWallTop(game, height, roomLeft, roomTop, doorLPC),
+      lightsOut.Room.makeVWallBottom(game, height, roomLeft, roomTop, doorLPC),
 
-    // right wall
-    this.group.add(lightsOut.Room.makeVWallTop(game, height, roomRight - lightsOut.Room.wallWidth, roomTop, doorRPC));
-    this.group.add(lightsOut.Room.makeVWallBottom(game, height, roomRight - lightsOut.Room.wallWidth, roomTop, doorRPC));
+      // right wall
+      lightsOut.Room.makeVWallTop(game, height, roomRight - lightsOut.Room.wallWidth, roomTop, doorRPC),
+      lightsOut.Room.makeVWallBottom(game, height, roomRight - lightsOut.Room.wallWidth, roomTop, doorRPC),
 
-    // top wall
-    this.group.add(lightsOut.Room.makeHWallLeft(game, width, roomLeft, roomTop, doorTPC));
-    this.group.add(lightsOut.Room.makeHWallRight(game, width, roomLeft, roomTop, doorTPC));
+      // top wall
+      lightsOut.Room.makeHWallLeft(game, width, roomLeft, roomTop, doorTPC),
+      lightsOut.Room.makeHWallRight(game, width, roomLeft, roomTop, doorTPC),
 
-    // bottom wall
-    this.group.add(lightsOut.Room.makeHWallLeft(game, width, roomLeft, roomBottom - lightsOut.Room.wallWidth, doorBPC));
-    this.group.add(lightsOut.Room.makeHWallRight(game, width, roomLeft, roomBottom - lightsOut.Room.wallWidth, doorBPC));
+      // bottom wall
+      lightsOut.Room.makeHWallLeft(game, width, roomLeft, roomBottom - lightsOut.Room.wallWidth, doorBPC),
+      lightsOut.Room.makeHWallRight(game, width, roomLeft, roomBottom - lightsOut.Room.wallWidth, doorBPC)
+    ];
+    this.walls.forEach(function(wall){ 
+      zDepthManager.wall.add(wall);
+      wall.z = lightsOut.ZDepth.FLOOR;
+    });
 
     /** 
      * The lighting for the room sets the level of visibility, an alpha value of 1.0 indicates an unlit room, 
      * and a value of 0.0 indicates full visibility.
      */
     this.lighting = game.add.tileSprite(roomLeft, roomTop, width, height, lightsOut.Room.lightingKey);
-    this.group.add(this.lighting);
-
-    this.group.sort();
+    this.lighting.z = lightsOut.ZDepth.LIGHTING;
+    zDepthManager.lighting.add(this.lighting);
 
     /**
      * The min and max alpha values for the lighting in this room.
@@ -74,8 +79,8 @@ var LightsOut = (function(lightsOut){
   };
 
   /** Factory function for creating a room group. */
-  lightsOut.Room.createRoom = function(game, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC) {
-    return new lightsOut.Room(game, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC);
+  lightsOut.Room.createRoom = function(game, zDepthManager, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC) {
+    return new lightsOut.Room(game, zDepthManager, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC);
   };
 
   /**
@@ -143,7 +148,7 @@ var LightsOut = (function(lightsOut){
    * Collides the blocking elements of the room with the specified sprite.
    */
   lightsOut.Room.prototype.collideWith = function(sprite) {
-    this.game.physics.arcade.collide(this.group, sprite);
+    this.game.physics.arcade.collide(this.walls, sprite);
   };
 
   /**
