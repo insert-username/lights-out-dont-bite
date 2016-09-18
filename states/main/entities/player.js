@@ -1,8 +1,9 @@
 var LightsOut = (function(lightsOut){
 
-  lightsOut.Player = function(game) {
+  lightsOut.Player = function(game, x, y) {
     this.game = game;
-    Phaser.Sprite.call(this, game, 100, 100, lightsOut.Player.key);
+    Phaser.Sprite.call(this, game, x, y, lightsOut.Player.key);
+    this.anchor.setTo(0.5, 0.5);
 
     this.walkSpeed = 100.0;
     this.walkAcceleration = 1000;

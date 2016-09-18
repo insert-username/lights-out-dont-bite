@@ -3,23 +3,30 @@ var LightsOut = (function(lightsOut){
 
   lightsOut.States.Main = {
 
+    init: function(params) {
+      // the map file containing the game state.
+      this.mapName = params.mapName;
+    },
+
     preload: function() {
       // load assets.
       lightsOut.Room.load(game);
       lightsOut.Player.load(game);
+      game.load.text("mapFile", "assets/maps/" + this.mapName);
     },
 
     create: function() {
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-      // spawn sprites.
-      this.rooms = [
-        lightsOut.Room.createRoom(game, 300, 300, 100, 100),
-        lightsOut.Room.createRoom(game, 100, 100, 150, 150),
-        lightsOut.Room.createRoom(game, 100, 250, 150, 150)
-      ];;
+      var mapFile = JSON.parse(game.cache.getText("mapFile"));
 
-      this.player = new lightsOut.Player(game);
+      var rooms = [];
+      mapFile.rooms.forEach(function(room) {
+        rooms.push(lightsOut.Room.createRoom(game, room.x, room.y, room.w, room.h));
+      });
+      this.rooms = rooms;
+
+      this.player = new lightsOut.Player(game, mapFile.player.x, mapFile.player.y);
       this.game.add.existing(this.player);
     },
 

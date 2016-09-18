@@ -18,7 +18,7 @@ var LightsOut = (function(lightsOut){
       this.subtitle.anchor.set(0.5, 0.5);
 
       game.input.keyboard.onDownCallback = function () {
-        game.state.start('main', true, true);
+        game.state.start('main', true, true, { mapName: "00.json" });
         game.input.keyboard.onDownCallback = null;
       };
     },
