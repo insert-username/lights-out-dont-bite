@@ -23,32 +23,28 @@ var LightsOut = (function(lightsOut){
       var mapFile = JSON.parse(mapFileText);
 
       var zDepth = new lightsOut.ZDepth(game);
-      var rooms = [];
+      var roomManager = new lightsOut.RoomManager(game);
       mapFile.rooms.forEach(function(room) {
         var newRoom = lightsOut.Room.createRoom(game, zDepth,
-          room.x, room.y, room.w, room.h, 
+          room.x, room.y, room.w, room.h,
           room.doors.top, room.doors.bottom, room.doors.left, room.doors.right);
         if(room.lit) {
           newRoom.setLit();
         } else {
           newRoom.setUnlit();
         }
-        rooms.push(newRoom);
+        roomManager.addRoom(newRoom);
       });
-      this.rooms = rooms;
+      this.roomManager = roomManager;
 
-      this.nasty = new lightsOut.Nasty(game, this.rooms, mapFile.nasty.x, mapFile.nasty.y);
+      this.nasty = new lightsOut.Nasty(game, roomManager, mapFile.nasty.x, mapFile.nasty.y);
       this.player = new lightsOut.Player(game, mapFile.player.x, mapFile.player.y);
       zDepth.sprite.add(this.nasty);
       zDepth.sprite.add(this.player);
     },
 
     update: function() {
-      var player = this.player;
-      this.rooms.forEach(function(room){
-        room.collideWith(player);
-      });
-
+      this.roomManager.collideWith(this.player);
       this.nasty.step(this.player);
     },
   };

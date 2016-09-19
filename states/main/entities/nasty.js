@@ -4,9 +4,9 @@
  */
 var LightsOut = (function(lightsOut){
 
-  lightsOut.Nasty = function(game, rooms, x, y) {
+  lightsOut.Nasty = function(game, roomManager, x, y) {
     Phaser.Sprite.call(this, game, x, y, lightsOut.Nasty.key);
-    this.rooms = rooms;
+    this.roomManager = roomManager;
   };
 
   lightsOut.Nasty.key = "nasty";
@@ -17,7 +17,11 @@ var LightsOut = (function(lightsOut){
   lightsOut.Nasty.prototype = Object.create(Phaser.Sprite.prototype);
   lightsOut.Nasty.prototype.constructor = lightsOut.Nasty;
 
+  /**
+   * Steps the AI for this entity.
+   */
   lightsOut.Nasty.prototype.step = function(player) {
+    var containingRoom = this.roomManager.getContainingRoom(this);
     var distance = Phaser.Math.distance(this.x, this.y, player.x, player.y);
   };
 
