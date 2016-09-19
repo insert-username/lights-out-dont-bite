@@ -27,7 +27,14 @@ var LightsOut = (function(lightsOut){
       var roomManager = new lightsOut.RoomManager(this.game, this.player);
       this.roomManager = roomManager;
 
-      this.nasty = new lightsOut.Nasty(game, roomManager, mapFile.nasty.x, mapFile.nasty.y);
+      var navMesh = new lightsOut.NavMesh();
+      this.navMesh = navMesh;
+      mapFile.navMesh.forEach(function(point) {
+        navMesh.addPoint(point.x, point.y, point.attachedIndices);
+      });
+
+      this.nasty = new lightsOut.Nasty(game, roomManager, navMesh,
+        mapFile.nasty.x, mapFile.nasty.y);
 
       var zDepth = new lightsOut.ZDepth(game);
       zDepth.sprite.add(this.nasty);

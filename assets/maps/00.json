@@ -1,6 +1,12 @@
 {
     "player" : { "x": 100, "y": 100 },
 	"nasty" : { "x": 200, "y": 200 },
+	"navMesh" : [
+		{ "x": 100, "y": 100, "attachedIndices": [1, 2] },
+		{ "x": 200, "y": 100, "attachedIndices": [0, 3] },
+		{ "x": 100, "y": 200, "attachedIndices": [0, 3] },
+		{ "x": 200, "y": 200, "attachedIndices": [1, 2] }
+	],
 	"rooms": [{
 		"x": 100,
 		"y": 100,
