@@ -34,13 +34,13 @@ var LightsOut = (function(lightsOut){
       lightsOut.Room.makeHWallLeft(game, width, roomLeft, roomBottom - lightsOut.Room.wallWidth, doorBPC),
       lightsOut.Room.makeHWallRight(game, width, roomLeft, roomBottom - lightsOut.Room.wallWidth, doorBPC)
     ];
-    this.walls.forEach(function(wall){ 
+    this.walls.forEach(function(wall){
       zDepthManager.wall.add(wall);
       wall.z = lightsOut.ZDepth.FLOOR;
     });
 
-    /** 
-     * The lighting for the room sets the level of visibility, an alpha value of 1.0 indicates an unlit room, 
+    /**
+     * The lighting for the room sets the level of visibility, an alpha value of 1.0 indicates an unlit room,
      * and a value of 0.0 indicates full visibility.
      */
     this.lighting = game.add.tileSprite(roomLeft, roomTop, width, height, lightsOut.Room.lightingKey);
@@ -62,7 +62,7 @@ var LightsOut = (function(lightsOut){
    * Describes the lighting values of the room.
    * The values for the enum keys are the max alpha
    * the lighting element should have when the room
-   * is in that state. 
+   * is in that state.
    */
   lightsOut.Room.State = {
 
@@ -70,6 +70,12 @@ var LightsOut = (function(lightsOut){
      * Indicates that the room is currently illuminated.
      */
     LIT : 0.8,
+
+    /**
+     * Indicates that the room is dark, but partially illuminated
+     * by the player.
+     */
+    SEMI_LIT : 0.95,
 
     /**
      * Indicates that the room is dark.
@@ -151,33 +157,38 @@ var LightsOut = (function(lightsOut){
   };
 
   /**
-   * Illuminates the room.
-   */
-  lightsOut.Room.prototype.setLit = function(game) {
-    this.setState(this.game, lightsOut.Room.State.LIT, 1000);
-  };
-
-  /**
-   * Sets the room to dark.
-   */
-  lightsOut.Room.prototype.setUnlit = function(game) {
-    this.setState(this.game, lightsOut.Room.State.UNLIT, 1000);
-  };
-
-  /**
-   * @return true if the room contains the specified point. 
+   * @return true if the room contains the specified point.
    */
   lightsOut.Room.prototype.containsPoint = function(x, y) {
     return this.floor.getBounds().contains(x, y);
   };
 
   /**
-   * @param State must be one of lightsOut.Room.State.
+   * Returns the current illumination of the room. This value should
+   * always be one of: lightsOut.Room.State.
    */
-  lightsOut.Room.prototype.setState = function(game, state, tweenTimeMs) {
+  lightsOut.Room.prototype.getIllumination = function(state) {
+    return this.state;
+  };
+
+  /**
+   * Sets the current illumination of the room. A tween is used to
+   * smooth the transition, however the state transition is instant.
+   * @param state one of : lightsOut.Room.State.
+   */
+  lightsOut.Room.prototype.setIllumination = function(state) {
+    this.setState(state, 1000);
+  };
+
+  /**
+   * @param State must be one of lightsOut.Room.State.
+   * @param tweenTimeMs the amount of time (in milliseconds) to take
+   * to perform the visual state transition.
+   */
+  lightsOut.Room.prototype.setState = function(state, tweenTimeMs) {
     this.state = state;
 
-    var lightingTween = game.add.tween(this);
+    var lightingTween = this.game.add.tween(this);
     lightingTween.to( { lightingAlphaMin: state * 0.95, lightingAlphaMax: state }, tweenTimeMs, Phaser.Easing.Linear.None);
     lightingTween.start();
   };

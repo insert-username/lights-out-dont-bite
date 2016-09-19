@@ -22,28 +22,32 @@ var LightsOut = (function(lightsOut){
       var mapFileText = this.game.cache.getText("mapFile");
       var mapFile = JSON.parse(mapFileText);
 
+      this.player = new lightsOut.Player(game, mapFile.player.x, mapFile.player.y);
+
+      var roomManager = new lightsOut.RoomManager(this.game, this.player);
+      this.roomManager = roomManager;
+
+      this.nasty = new lightsOut.Nasty(game, roomManager, mapFile.nasty.x, mapFile.nasty.y);
+
       var zDepth = new lightsOut.ZDepth(game);
-      var roomManager = new lightsOut.RoomManager(game);
+      zDepth.sprite.add(this.nasty);
+      zDepth.sprite.add(this.player);
+
       mapFile.rooms.forEach(function(room) {
         var newRoom = lightsOut.Room.createRoom(game, zDepth,
           room.x, room.y, room.w, room.h,
           room.doors.top, room.doors.bottom, room.doors.left, room.doors.right);
-        if(room.lit) {
-          newRoom.setLit();
-        } else {
-          newRoom.setUnlit();
-        }
+
+          newRoom.setIllumination(room.lit ?
+            lightsOut.Room.State.LIT :
+            lightsOut.Room.State.UNLIT);
+
         roomManager.addRoom(newRoom);
       });
-      this.roomManager = roomManager;
-
-      this.nasty = new lightsOut.Nasty(game, roomManager, mapFile.nasty.x, mapFile.nasty.y);
-      this.player = new lightsOut.Player(game, mapFile.player.x, mapFile.player.y);
-      zDepth.sprite.add(this.nasty);
-      zDepth.sprite.add(this.player);
     },
 
     update: function() {
+      this.roomManager.step();
       this.roomManager.collideWith(this.player);
       this.nasty.step(this.player);
     },
