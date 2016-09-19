@@ -44,12 +44,34 @@ var LightsOut = (function(lightsOut){
 
         roomManager.addRoom(newRoom);
       });
+
+      var style = { font: "32px verdana", fill: "#ff0044", wordWrap: true, wordWrapWidth: 300, align: "center" };
+      this.deathText = game.add.text(this.game.world.width / 2, this.game.world.height / 2, "You Are Dead.", style);
+      this.deathText.anchor.set(0.5);
+      this.deathText.visible = false;
+      this.deathText.alpha = 0;
     },
 
     update: function() {
+      // do nothing if the player has died.
+      if (!this.player.isAlive()) {
+        return;
+      }
+
       this.roomManager.step();
       this.roomManager.collideWith(this.player);
       this.nasty.step(this.player);
+
+      if (!this.player.isAlive()) {
+        var textFadeIn = this.game.add.tween(this.deathText);
+        textFadeIn.to({alpha: 1.0}, 500, Phaser.Easing.Linear.None);
+        textFadeIn.start();
+        this.deathText.visible = true;
+
+        this.game.time.events.add(Phaser.Timer.SECOND * 5, function() {
+          this.game.state.start('menu');
+        }, this);
+      }
     },
   };
 

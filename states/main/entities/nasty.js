@@ -6,6 +6,7 @@ var LightsOut = (function(lightsOut){
 
   lightsOut.Nasty = function(game, roomManager, x, y) {
     Phaser.Sprite.call(this, game, x, y, lightsOut.Nasty.key);
+    this.anchor.setTo(0.5, 0.5);
     this.roomManager = roomManager;
   };
 
@@ -23,6 +24,9 @@ var LightsOut = (function(lightsOut){
   lightsOut.Nasty.prototype.step = function(player) {
     var containingRoom = this.roomManager.getContainingRoom(this);
     var distance = Phaser.Math.distance(this.x, this.y, player.x, player.y);
+    if (distance < 50) {
+      player.damage(1);
+    }
   };
 
   return lightsOut;

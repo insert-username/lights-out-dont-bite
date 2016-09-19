@@ -48,13 +48,20 @@ var LightsOut = (function(lightsOut){
   }
 
   lightsOut.Player.prototype.update = function() {
+    // disable controls on death.
+    if (!this.isAlive()) {
+      this.body.acceleration.x = 0;
+      this.body.acceleration.y = 0;
+      return;
+    }
+
     var ddx = 0;
     var ddy = 0;
-    
+
     if (this.controls.left.isDown) {
       ddx -= this.walkAcceleration;
     }
-    
+
     if (this.controls.right.isDown) {
       ddx += this.walkAcceleration;
     }
