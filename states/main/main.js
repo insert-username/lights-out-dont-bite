@@ -6,6 +6,7 @@ var LightsOut = (function(lightsOut){
     init: function(params) {
       // the map file containing the game state.
       this.mapName = params.mapName;
+      this.debugMode = false;
     },
 
     preload: function() {
@@ -42,6 +43,7 @@ var LightsOut = (function(lightsOut){
 
       mapFile.rooms.forEach(function(room) {
         var newRoom = lightsOut.Room.createRoom(game, zDepth,
+          room.navPointIndex,
           room.x, room.y, room.w, room.h,
           room.doors.top, room.doors.bottom, room.doors.left, room.doors.right);
 
@@ -80,6 +82,26 @@ var LightsOut = (function(lightsOut){
         }, this);
       }
     },
+
+    render: function() {
+      if (this.debugMode) {
+        var game = this.game;
+
+        game.debug.geom(new Phaser.Circle(this.player.x, this.player.y, 50));
+        game.debug.geom(new Phaser.Circle(this.nasty.x, this.nasty.y, 50));
+
+        var navPoints = this.navMesh.points;
+        var game = this.game;
+        navPoints.forEach(function(point) {
+          var circle = new Phaser.Circle(point.x, point.y, 10);
+          game.debug.geom(circle);
+          point.attachedIndices.forEach(function(i) {
+            var line = new Phaser.Line(point.x, point.y, navPoints[i].x, navPoints[i].y);
+            game.debug.geom(line);
+          });
+        });
+      }
+    }
   };
 
   return LightsOut;

@@ -5,8 +5,12 @@
  */
 var LightsOut = (function(lightsOut){
 
-  lightsOut.Room = function(game, zDepthManager, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC) {
+  lightsOut.Room = function(game, zDepthManager,
+    navPointIndex,
+    x, y, width, height,
+    doorTPC, doorBPC, doorLPC, doorRPC) {
     this.game = game;
+    this.navPointIndex = navPointIndex;
 
     var roomLeft = x - width / 2;
     var roomTop = y - height / 2;
@@ -84,8 +88,9 @@ var LightsOut = (function(lightsOut){
   };
 
   /** Factory function for creating a room group. */
-  lightsOut.Room.createRoom = function(game, zDepthManager, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC) {
-    return new lightsOut.Room(game, zDepthManager, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC);
+  lightsOut.Room.createRoom = function(game, zDepthManager, navPointIndex, x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC) {
+    return new lightsOut.Room(game, zDepthManager, navPointIndex,
+      x, y, width, height, doorTPC, doorBPC, doorLPC, doorRPC);
   };
 
   /**
@@ -148,6 +153,14 @@ var LightsOut = (function(lightsOut){
   }
 
   lightsOut.Room.prototype.constructor = lightsOut.Room;
+
+  /**
+   * @return the index of the nav point corresponding to the
+   * central point of this room.
+   */
+  lightsOut.Room.prototype.getNavPointIndex = function() {
+    return this.navPointIndex;
+  };
 
   /**
    * Collides the blocking elements of the room with the specified sprite.

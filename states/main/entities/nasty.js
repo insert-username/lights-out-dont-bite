@@ -39,15 +39,22 @@ var LightsOut = (function(lightsOut){
     var playerRoom = this.roomManager.getContainingRoom(player);
     var distanceToPlayer = Phaser.Math.distance(this.x, this.y, player.x, player.y);
 
+    var currentNavPointIndex = containingRoom.getNavPointIndex();
+    var playerNavPointIndex = playerRoom.getNavPointIndex();
+
     // if the player is close enough, damage them.
-    if (distanceToPlayer < 30) {
+    if (distanceToPlayer > this.maxPlayerDistance && this.isTweening) {
+      this.moveTween.stop();
+      this.isTweening = false;
+      this.path = this.navMesh.getPath(currentNavPointIndex, currentNavPointIndex);
+    } else if (distanceToPlayer < 30) {
       player.damage(1);
     } else if (!this.isTweening) {
       if (playerRoom === containingRoom) {
         // walk directly towards the player.
         this.path = [{x: player.x, y: player.y}];
       } else if (distanceToPlayer < this.maxPlayerDistance && this.path.length === 0) {
-        // get the path from the nav mesh to the player.
+        this.path = this.navMesh.getPath(currentNavPointIndex, playerNavPointIndex);
       }
     }
 
@@ -66,14 +73,14 @@ var LightsOut = (function(lightsOut){
     var destinationDistance =
       Phaser.Math.distance(this.x, this.y, destination.x, destination.y);
 
-    var tweenTime = 1000 * destinationDistance / this.walkSpeed;
-    var moveTween = this.game.add.tween(this);
-    moveTween.to({x: destination.x, y: destination.y}, tweenTime, Phaser.Easing.Linear.None);
-    moveTween.onComplete.add(function(){
+    var tweenTime = Math.max(1, 1000 * destinationDistance / this.walkSpeed);
+    this.moveTween = this.game.add.tween(this);
+    this.moveTween.to({x: destination.x, y: destination.y}, tweenTime, Phaser.Easing.Linear.None);
+    this.moveTween.onComplete.add(function(){
       this.isTweening = false;
       this.path.splice(0, 1);
     }, this);
-    moveTween.start();
+    this.moveTween.start();
   };
 
   return lightsOut;
