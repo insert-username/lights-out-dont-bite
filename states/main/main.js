@@ -44,6 +44,8 @@ var LightsOut = (function(lightsOut){
       this.player = mapImporter.getPlayer();
       this.nasty = mapImporter.getEnemy();
 
+      this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
+
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
       this.game.physics.arcade.enable(this.wallLayer);
       this.game.physics.arcade.enable(this.player);
