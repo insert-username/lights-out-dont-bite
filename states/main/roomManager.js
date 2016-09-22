@@ -25,15 +25,6 @@ var LightsOut = (function(lightsOut){
   };
 
   /**
-   * Collides the rooms with the specified sprite.
-   */
-  lightsOut.RoomManager.prototype.collideWith = function(sprite) {
-      this.rooms.forEach(function(room){
-        room.collideWith(sprite);
-      });
-  };
-
-  /**
    * Returns the room containing the specified sprite.
    */
   lightsOut.RoomManager.prototype.getContainingRoom = function(sprite) {

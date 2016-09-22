@@ -20,6 +20,21 @@ var LightsOut = (function(lightsOut){
     return index;
   };
 
+  lightsOut.NavMesh.prototype.closestNavPointIndex = function(x, y) {
+    var closestDist;
+    var closestIndex = -1;
+    this.points.forEach(function(point, index){
+      var dist = Phaser.Math.distanceSq(x, y, point.x, point.y);
+
+      if (closestIndex === -1 || dist < closestDist) {
+        closestDist = dist;
+        closestIndex = index;
+      }
+    });
+
+    return closestIndex;
+  };
+
   /**
    * @return an array of the indices of points attached to the
    * index i.
@@ -52,7 +67,6 @@ var LightsOut = (function(lightsOut){
     return Phaser.Math.distance(this.x, this.y,
       otherNode.x, otherNode.y);
   };
-
 
   lightsOut.NavMesh.Graph = function(nodes) {
     this.nodes = nodes;

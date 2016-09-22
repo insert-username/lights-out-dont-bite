@@ -39,8 +39,8 @@ var LightsOut = (function(lightsOut){
     var playerRoom = this.roomManager.getContainingRoom(player);
     var distanceToPlayer = Phaser.Math.distance(this.x, this.y, player.x, player.y);
 
-    var currentNavPointIndex = containingRoom.getNavPointIndex();
-    var playerNavPointIndex = playerRoom.getNavPointIndex();
+    var currentNavPointIndex = this.navMesh.closestNavPointIndex(this.x, this.y);
+    var playerNavPointIndex = this.navMesh.closestNavPointIndex(player.x, player.y);
 
     // if the player is close enough, damage them.
     if (distanceToPlayer > this.maxPlayerDistance && this.isTweening) {
