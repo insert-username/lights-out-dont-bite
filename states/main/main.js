@@ -52,8 +52,8 @@ var LightsOut = (function(lightsOut){
       this.deathText = this.game.add.text(0, 0, "You Are Dead.", style);
       this.deathText.anchor.set(0.5);
       this.deathText.fixedToCamera = true;
-      this.deathText.cameraOffset.setTo(this.game.camera.view.centerX,
-        this.game.camera.view.centerY);
+      this.deathText.cameraOffset.setTo(this.game.camera.view.width / 2,
+        this.game.camera.view.height / 2);
       this.deathText.visible = false;
       this.deathText.alpha = 0;
     },
