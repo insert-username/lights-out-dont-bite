@@ -40,18 +40,24 @@ var LightsOut = (function(lightsOut){
     /**
      * Indicates that the room is currently illuminated.
      */
-    LIT : 0.8,
+    LIT : "LIT",
 
     /**
      * Indicates that the room is dark, but partially illuminated
      * by the player.
      */
-    SEMI_LIT : 0.95,
+    SEMI_LIT : "SEMI_LIT",
 
     /**
      * Indicates that the room is dark.
      */
-    UNLIT : 1.0
+    UNLIT : "UNLIT"
+  };
+
+  lightsOut.Room.State.Alpha = {
+    LIT : 0.8,
+    SEMI_LIT : 0.1,
+    UNLIT : 0.95
   };
 
   /** Factory function for creating a room group. */
@@ -115,7 +121,7 @@ var LightsOut = (function(lightsOut){
 
     this.state = state;
 
-    var alphaVal = lightsOut.Room.State[state];
+    var alphaVal = lightsOut.Room.State.Alpha[state];
 
     var lightingTween = this.game.add.tween(this);
     lightingTween.to( { lightingAlphaMin: alphaVal * 0.95, lightingAlphaMax: alphaVal }, tweenTimeMs, Phaser.Easing.Linear.None);
