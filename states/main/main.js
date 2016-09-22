@@ -16,6 +16,7 @@ var LightsOut = (function(lightsOut){
       lightsOut.Player.load(game);
       game.load.tilemap("map", "assets/maps/" + this.mapName, null, Phaser.Tilemap.TILED_JSON);
       game.load.image('wall', 'assets/sprites/wall.png');
+      game.load.image('floor', 'assets/sprites/floor.png');
     },
 
     create: function() {
@@ -26,10 +27,12 @@ var LightsOut = (function(lightsOut){
       //  The first parameter is the tileset name, as specified in the Tiled map editor (and in the tilemap json file)
       //  The second parameter maps this name to the Phaser.Cache key 'tiles'
       map.addTilesetImage('wall', 'wall');
+      map.addTilesetImage('floor', 'floor');
 
       //  Creates a layer from the World1 layer in the map data.
       //  A Layer is effectively like a Phaser.Sprite, so is added to the display list.
       this.wallLayer = map.createLayer('Walls');
+      var floorLayer = map.createLayer('Floor');
       map.setCollisionBetween(1, 1);
       //  This resizes the game world to match the layer dimensions
       this.wallLayer.resizeWorld();
@@ -37,6 +40,7 @@ var LightsOut = (function(lightsOut){
 
       var zDepth = new lightsOut.ZDepth(this.game);
       zDepth.wall.add(this.wallLayer);
+      zDepth.floor.add(floorLayer);
 
       var mapImporter = new lightsOut.MapImporter(this.game, zDepth, map);
       this.roomManager = mapImporter.getRoomManager();
