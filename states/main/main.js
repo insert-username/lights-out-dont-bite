@@ -39,6 +39,7 @@ var LightsOut = (function(lightsOut){
 
       var mapImporter = new lightsOut.MapImporter(this.game, zDepth, map);
       this.roomManager = mapImporter.getRoomManager();
+      this.navMesh = mapImporter.getNavMesh();
 
 
 

@@ -12,7 +12,7 @@ var LightsOut = (function(lightsOut){
     var mapEnemySpawn = lightsOut.MapImporter.getObjectLayer(map, "Enemy Spawn");
 
     this.roomManager = this.parseRooms(mapRooms);
-    this.parseNavMesh(mapNavMesh);
+    this.navMesh = this.parseNavMesh(mapNavMesh);
     this.parsePlayer(mapPlayerSpawn);
     this.parseEnemy(mapEnemySpawn);
 
@@ -45,12 +45,54 @@ var LightsOut = (function(lightsOut){
     return roomManager;
   };
 
+  lightsOut.MapImporter.prototype.getNavMesh = function() {
+    if (this.navMesh === undefined) {
+      throw "The Nav mesh has not been created yet.";
+    }
+
+    return this.navMesh;
+  };
+
   lightsOut.MapImporter.prototype.parseNavMesh = function(mapNavMesh) {
-// var navMesh = new lightsOut.NavMesh();
-//     this.navMesh = navMesh;
-//     this.map.navMesh.forEach(function(point) {
-//       navMesh.addPoint(point.x, point.y, point.attachedIndices);
-//     });
+    var result = new lightsOut.NavMesh();
+
+    var lines = [];
+    var points = [];
+
+    mapNavMesh.forEach(function(o) {
+      if (o.polyline) {
+        lines.push(new Phaser.Line(o.polyline[0][0] + o.x, o.polyline[0][1] + o.y,
+          o.polyline[1][0] + o.x, o.polyline[1][1] + o.y));
+      } else if (o.rectangle) {
+        points.push(new Phaser.Circle(o.x + o.width / 2, o.y + o.height / 2, 16));
+      } else  {
+        throw "Unexpected navmesh object: " + o;
+      }
+    });
+
+    var isOverlapping = function(point, line) {
+      return point.contains(line.start.x, line.start.y) ||
+        point.contains(line.end.x, line.end.y);
+    };
+
+    points.forEach(function(p0, i0){
+
+      var overlappingIndices = [];
+
+      lines.forEach(function(l){
+        if (isOverlapping(p0, l)) {
+          points.forEach(function(p1, i1){
+            if (isOverlapping(p1, l)) {
+              overlappingIndices.push(i1);
+            }
+          });
+        }
+      });
+
+      result.addPoint(p0.x, p0.y, overlappingIndices);
+    });
+
+    return result;
   };
 
   lightsOut.MapImporter.prototype.parsePlayer = function(mapPlayerSpawn) {
