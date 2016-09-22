@@ -88,7 +88,11 @@ var LightsOut = (function(lightsOut){
    * @return true if the room contains the specified point.
    */
   lightsOut.Room.prototype.containsPoint = function(x, y) {
-    return this.lighting.getBounds().contains(x, y);
+    var xLocal = x - this.lighting.x;
+    var yLocal = y - this.lighting.y;
+
+    return xLocal >= 0 && xLocal <= this.lighting.width &&
+      yLocal >= 0 && yLocal <= this.lighting.height;
   };
 
   /**
