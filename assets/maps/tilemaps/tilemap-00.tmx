@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" nextobjectid="134">
+ <tileset firstgid="1" name="wall" tilewidth="16" tileheight="16" tilecount="1">
+  <image source="../sprites/wall.png" width="16" height="16"/>
+ </tileset>
+ <layer name="Walls" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2MEJgDAQAEHtv2k70IREXGQG/Ah+bjF4HgcAAABQc26+WDMyw9E567FOjxY9WvRo0aNFjxY9vnW3MzzdG3mWOU8zW3lf9JinR8ubM9Njnh4tzqsWPVp2f+/6376XXa9FjxY9WvRo0aNFjxY9WuwWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPA/F9skAH0=
+  </data>
+ </layer>
+ <objectgroup name="Rooms">
+  <object id="33" name="0" type="UNLIT" x="72" y="168" width="144" height="128"/>
+  <object id="34" name="2" type="UNLIT" x="8" y="296" width="128" height="112"/>
+  <object id="38" name="3" type="UNLIT" x="136" y="296" width="144" height="112"/>
+  <object id="40" name="5" type="LIT" x="72" y="408" width="160" height="128"/>
+  <object id="42" name="4" type="UNLIT" x="280" y="296" width="96" height="112"/>
+  <object id="43" name="1" type="LIT" x="216" y="168" width="160" height="128"/>
+ </objectgroup>
+ <objectgroup name="Nav Mesh">
+  <object id="100" x="96" y="384"/>
+  <object id="102" x="96" y="320"/>
+  <object id="103" x="96" y="272"/>
+  <object id="106" x="176" y="272"/>
+  <object id="107" x="96" y="432"/>
+  <object id="109" x="176" y="432"/>
+  <object id="111" x="176" y="352"/>
+  <object id="112" x="256" y="352"/>
+  <object id="113" x="304" y="352"/>
+  <object id="114" x="336" y="320"/>
+  <object id="115" x="336" y="272"/>
+  <object id="116" x="96" y="272">
+   <polyline points="0,0 0,48"/>
+  </object>
+  <object id="117" x="96" y="272">
+   <polyline points="0,0 80,0"/>
+  </object>
+  <object id="118" x="176" y="352">
+   <polyline points="0,0 0,-80"/>
+  </object>
+  <object id="119" x="112" y="352"/>
+  <object id="120" x="96" y="320">
+   <polyline points="0,0 16,32"/>
+  </object>
+  <object id="121" x="96" y="384">
+   <polyline points="0,0 16,-32"/>
+  </object>
+  <object id="122" x="96" y="432">
+   <polyline points="0,0 0,-48"/>
+  </object>
+  <object id="123" x="96" y="432">
+   <polyline points="0,0 80,0"/>
+  </object>
+  <object id="124" x="176" y="432">
+   <polyline points="0,0 0,-80"/>
+  </object>
+  <object id="128" x="176" y="352">
+   <polyline points="0,0 80,0"/>
+  </object>
+  <object id="130" x="256" y="352">
+   <polyline points="0,0 48,0"/>
+  </object>
+  <object id="131" x="304" y="352">
+   <polyline points="0,0 32,-32"/>
+  </object>
+  <object id="132" x="336" y="320">
+   <polyline points="0,0 0,-48"/>
+  </object>
+  <object id="133" x="112" y="352">
+   <polyline points="0,0 64,0"/>
+  </object>
+ </objectgroup>
+</map>
