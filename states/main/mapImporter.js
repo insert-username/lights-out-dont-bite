@@ -10,11 +10,13 @@ var LightsOut = (function(lightsOut){
     var mapNavMesh = lightsOut.MapImporter.getObjectLayer(map, "Nav Mesh");
     var mapPlayerSpawn = lightsOut.MapImporter.getObjectLayer(map, "Player Spawn");
     var mapEnemySpawn = lightsOut.MapImporter.getObjectLayer(map, "Enemy Spawn");
+    var mapExits = lightsOut.MapImporter.getObjectLayer(map, "Exit");
 
     this.player = this.parsePlayer(mapPlayerSpawn);
     this.roomManager = this.parseRooms(mapRooms, this.player);
     this.navMesh = this.parseNavMesh(mapNavMesh);
     this.nasty = this.parseEnemy(mapEnemySpawn, this.roomManager, this.navMesh);
+    this.exits = this.parseExits(mapExits);
   };
 
   lightsOut.MapImporter.prototype.getRoomManager = function() {
@@ -136,6 +138,26 @@ var LightsOut = (function(lightsOut){
 
     var result = new lightsOut.Nasty(this.game, roomManager, navMesh, x, y);
     this.zDepth.sprite.add(result);
+    return result;
+  };
+
+  lightsOut.MapImporter.prototype.getExits = function() {
+    if (this.exits === undefined) {
+      throw "The Exits have not been created yet.";
+    }
+
+    return this.exits;
+  };
+
+  lightsOut.MapImporter.prototype.parseExits = function(mapExits) {
+    var result = [];
+    
+    for (var i = 0; i < mapExits.length; i++) {
+      var mapExit = mapExits[i];
+      var exit = new lightsOut.Exit(this.game, mapExit.x, mapExit.y, mapExit.width, mapExit.height, mapExit.name);
+      result.push(exit);
+    }
+
     return result;
   };
 

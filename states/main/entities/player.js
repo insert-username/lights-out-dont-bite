@@ -29,6 +29,7 @@ var LightsOut = (function(lightsOut){
     };
 
     this.health = 100;
+    this.controlsEnabled = true;
   }
 
   lightsOut.Player.key = "player";
@@ -47,9 +48,17 @@ var LightsOut = (function(lightsOut){
     this.health = Math.max(0, this.health - amount);
   }
 
+  lightsOut.Player.prototype.disableControls = function() {
+    if (!this.controlsEnabled) {
+      throw "Player controls have already been disabled.";
+    }
+
+    this.controlsEnabled = false;
+  }
+
   lightsOut.Player.prototype.update = function() {
     // disable controls on death.
-    if (!this.isAlive()) {
+    if (!this.controlsEnabled) {
       this.body.acceleration.x = 0;
       this.body.acceleration.y = 0;
       return;

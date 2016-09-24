@@ -3,6 +3,13 @@ var LightsOut = (function(lightsOut){
 
   lightsOut.States.Main = {
 
+    SubStates: {
+      ENTERING: 0,
+      PLAYING: 1,
+      EXITING: 2,
+      DYING: 3
+    },
+
     init: function(params) {
       // the map file containing the game state.
       this.mapName = params.mapName;
@@ -42,6 +49,7 @@ var LightsOut = (function(lightsOut){
       this.navMesh = mapImporter.getNavMesh();
       this.player = mapImporter.getPlayer();
       this.nasty = mapImporter.getEnemy();
+      this.exits = mapImporter.getExits();
 
       this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
 
@@ -57,20 +65,31 @@ var LightsOut = (function(lightsOut){
         this.game.camera.view.height / 2);
       this.deathText.visible = false;
       this.deathText.alpha = 0;
+
+      this.subState = lightsOut.States.Main.SubStates.PLAYING;
     },
 
     update: function() {
       // do nothing if the player has died.
-      if (!this.player.isAlive()) {
+      if (this.subState != lightsOut.States.Main.SubStates.PLAYING) {
         return;
       }
 
       this.game.physics.arcade.collide(this.player, this.wallLayer);
+      this.game.physics.arcade.overlap(this.player, this.exits, function(player, exit){
+        
+        this.player.disableControls();
+        this.subState = lightsOut.States.Main.SubStates.EXITING;
+
+        this.game.state.start('main', true, false, { mapName: exit.getDestinationMapName() });
+      }, null, this);
 
       this.roomManager.step();
       this.nasty.step(this.player);
 
       if (!this.player.isAlive()) {
+        this.player.disableControls();
+        this.subState = lightsOut.States.Main.SubStates.DYING;
         var textFadeIn = this.game.add.tween(this.deathText);
         textFadeIn.to({alpha: 1.0}, 500, Phaser.Easing.Linear.None);
         textFadeIn.start();
