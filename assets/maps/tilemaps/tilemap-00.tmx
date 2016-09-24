@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" nextobjectid="246">
- <tileset firstgid="1" name="wall" tilewidth="16" tileheight="16" tilecount="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" nextobjectid="261">
+ <tileset firstgid="1" name="wall" tilewidth="16" tileheight="16" tilecount="1" columns="1">
   <image source="../../sprites/wall.png" width="16" height="16"/>
  </tileset>
- <tileset firstgid="2" name="floor" tilewidth="16" tileheight="16" tilecount="4">
+ <tileset firstgid="2" name="floor" tilewidth="16" tileheight="16" tilecount="4" columns="2">
   <image source="../../sprites/floor.png" width="32" height="32"/>
  </tileset>
  <layer name="Floor" width="30" height="30">
@@ -135,6 +135,32 @@
   </object>
   <object id="232" x="112" y="192">
    <polyline points="0,0 64,0"/>
+  </object>
+  <object id="246" x="328.333" y="231.667"/>
+  <object id="247" x="328.667" y="264.667"/>
+  <object id="248" x="424" y="264"/>
+  <object id="249" x="376" y="281.333"/>
+  <object id="250" x="424.667" y="232.667"/>
+  <object id="254" x="304" y="192">
+   <polyline points="0,0 24,40"/>
+  </object>
+  <object id="255" x="328" y="264">
+   <polyline points="0,0 0,-32"/>
+  </object>
+  <object id="256" x="376" y="280">
+   <polyline points="0,0 -48,-16"/>
+  </object>
+  <object id="257" x="424" y="264">
+   <polyline points="0,0 -48,16"/>
+  </object>
+  <object id="258" x="424" y="232">
+   <polyline points="0,0 0,32"/>
+  </object>
+  <object id="259" x="96" y="160">
+   <polyline points="0,0 0,64"/>
+  </object>
+  <object id="260" x="328" y="232">
+   <polyline points="0,0 8,-72"/>
   </object>
  </objectgroup>
  <objectgroup name="Player Spawn">
