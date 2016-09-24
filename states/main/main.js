@@ -20,23 +20,18 @@ var LightsOut = (function(lightsOut){
     },
 
     create: function() {
-      //  The 'mario' key here is the Loader key given in game.load.tilemap
       map = this.game.add.tilemap('map');
       this.map = map;
 
-      //  The first parameter is the tileset name, as specified in the Tiled map editor (and in the tilemap json file)
-      //  The second parameter maps this name to the Phaser.Cache key 'tiles'
       map.addTilesetImage('wall', 'wall');
       map.addTilesetImage('floor', 'floor');
 
-      //  Creates a layer from the World1 layer in the map data.
-      //  A Layer is effectively like a Phaser.Sprite, so is added to the display list.
       this.wallLayer = map.createLayer('Walls');
       var floorLayer = map.createLayer('Floor');
-      map.setCollisionBetween(1, 1);
-      //  This resizes the game world to match the layer dimensions
+
       this.wallLayer.resizeWorld();
       this.wallLayer.debug = this.debugMode;
+      map.setCollision(1, true, this.wallLayer);
 
       var zDepth = new lightsOut.ZDepth(this.game);
       zDepth.wall.add(this.wallLayer);
