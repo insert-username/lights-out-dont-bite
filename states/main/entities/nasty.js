@@ -21,6 +21,10 @@ var LightsOut = (function(lightsOut){
     // array of x, y locations which are queued for movement.
     this.path = [];
     this.isTweening = false;
+
+    this.navPointFilter = function(i, navPointNode) {
+      return roomManager.getContainingRoom(navPointNode).getIllumination() != lightsOut.Room.State.LIT;
+    };
   };
 
   lightsOut.Nasty.key = "nasty";
@@ -46,15 +50,15 @@ var LightsOut = (function(lightsOut){
     if (distanceToPlayer > this.maxPlayerDistance && this.isTweening) {
       this.moveTween.stop();
       this.isTweening = false;
-      this.path = this.navMesh.getPath(currentNavPointIndex, currentNavPointIndex);
+      this.path = this.navMesh.getPath(currentNavPointIndex, currentNavPointIndex, this.navPointFilter);
     } else if (distanceToPlayer < 30) {
       player.damage(1);
     } else if (!this.isTweening) {
-      if (playerRoom === containingRoom) {
+      if (playerRoom === containingRoom && containingRoom.getIllumination() != lightsOut.Room.State.LIT) {
         // walk directly towards the player.
         this.path = [{x: player.x, y: player.y}];
       } else if (distanceToPlayer < this.maxPlayerDistance && this.path.length === 0) {
-        this.path = this.navMesh.getPath(currentNavPointIndex, playerNavPointIndex);
+        this.path = this.navMesh.getPath(currentNavPointIndex, playerNavPointIndex, this.navPointFilter);
       }
     }
 
