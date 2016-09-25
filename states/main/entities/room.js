@@ -55,8 +55,8 @@ var LightsOut = (function(lightsOut){
   };
 
   lightsOut.Room.State.Alpha = {
-    LIT : 0.8,
-    SEMI_LIT : 0.1,
+    LIT : 0.1,
+    SEMI_LIT : 0.5,
     UNLIT : 0.95
   };
 
