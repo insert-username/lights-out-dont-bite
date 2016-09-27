@@ -3,8 +3,8 @@
  <tileset firstgid="1" name="wall" tilewidth="16" tileheight="16" tilecount="1" columns="1">
   <image source="../../sprites/wall.png" width="16" height="16"/>
  </tileset>
- <tileset firstgid="2" name="floor" tilewidth="16" tileheight="16" tilecount="8" columns="5">
-  <image source="../../tilesets/office-floor.png" width="80" height="16"/>
+ <tileset firstgid="2" name="floor" tilewidth="16" tileheight="16" tilecount="7" columns="7">
+  <image source="../../tilesets/office-floor.png" width="112" height="16"/>
  </tileset>
  <layer name="Floor" width="30" height="100">
   <data encoding="csv">

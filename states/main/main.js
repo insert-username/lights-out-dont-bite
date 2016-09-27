@@ -48,7 +48,7 @@ var LightsOut = (function(lightsOut){
 
       this.wallLayer.resizeWorld();
       this.wallLayer.debug = this.debugMode;
-      map.setCollision(1, true, this.wallLayer);
+      map.setCollisionBetween(0, 100, true, this.wallLayer);
 
       var zDepth = new lightsOut.ZDepth(this.game);
       zDepth.wall.add(this.wallLayer);
