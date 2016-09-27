@@ -28,6 +28,8 @@ var LightsOut = (function(lightsOut){
       game.load.image('office-divider', 'assets/tilesets/office-divider.png');
       game.load.image('window', 'assets/tilesets/window.png');
       game.load.image('office-lighting', 'assets/tilesets/office-lighting.png');
+      game.load.image('floor-lighting', 'assets/tilesets/floor-lighting.png');
+      game.load.image('ceiling-lighting', 'assets/tilesets/ceiling-lighting.png');
     },
 
     create: function() {
@@ -40,11 +42,15 @@ var LightsOut = (function(lightsOut){
       map.addTilesetImage('floor-items', 'floor-items');
       map.addTilesetImage('window', 'window');
       map.addTilesetImage('office-lighting', 'office-lighting');
+      map.addTilesetImage('floor-lighting', 'floor-lighting');
+      map.addTilesetImage('ceiling-lighting', 'ceiling-lighting');
 
       this.wallLayer = map.createLayer('Walls');
       var floorLayer = map.createLayer('Floor');
+      var floorLightingLayer = map.createLayer('FloorLighting');
+      var ceilingLightingLayer = map.createLayer('CeilingLighting');
       var floorItemsLayer = map.createLayer('FloorItems');
-      var lightingLayer = map.createLayer('Lighting');
+      var ceilingLayer = map.createLayer('Ceiling');
 
       this.wallLayer.resizeWorld();
       this.wallLayer.debug = this.debugMode;
@@ -53,8 +59,10 @@ var LightsOut = (function(lightsOut){
       var zDepth = new lightsOut.ZDepth(this.game);
       zDepth.wall.add(this.wallLayer);
       zDepth.floor.add(floorLayer);
+      zDepth.floorLighting.add(floorLightingLayer);
       zDepth.floorItems.add(floorItemsLayer);
-      zDepth.lighting.add(lightingLayer);
+      zDepth.ceiling.add(ceilingLayer);
+      zDepth.ceilingLighting.add(ceilingLightingLayer);
 
       var mapImporter = new lightsOut.MapImporter(this.game, zDepth, map);
       this.roomManager = mapImporter.getRoomManager();

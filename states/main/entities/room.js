@@ -16,7 +16,7 @@ var LightsOut = (function(lightsOut){
      */
     this.lighting = game.add.tileSprite(x, y, width, height, lightsOut.Room.lightingKey);
     this.lighting.z = lightsOut.ZDepth.LIGHTING;
-    zDepthManager.lighting.add(this.lighting);
+    zDepthManager.ceilingLighting.add(this.lighting);
 
     /**
      * The min and max alpha values for the lighting in this room.
