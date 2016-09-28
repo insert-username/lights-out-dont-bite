@@ -53,7 +53,7 @@ var LightsOut = (function(lightsOut){
       this.path = this.navMesh.getPath(currentNavPointIndex, currentNavPointIndex, this.navPointFilter);
     } else if (distanceToPlayer < 30) {
       player.damage(1);
-    } else if (!this.isTweening) {
+    } else if (!this.isTweening && distanceToPlayer < this.maxPlayerDistance) {
       if (playerRoom === containingRoom && containingRoom.getIllumination() != lightsOut.Room.State.LIT) {
         // walk directly towards the player.
         this.path = [{x: player.x, y: player.y}];
