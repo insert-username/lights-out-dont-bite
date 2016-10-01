@@ -70,7 +70,7 @@ var LightsOut = (function(lightsOut){
       this.navMesh = mapImporter.getNavMesh();
       this.player = mapImporter.getPlayer();
       this.keys = mapImporter.getKeys();
-      this.nasty = mapImporter.getEnemy();
+      this.enemies = mapImporter.getEnemies();
       this.exit = mapImporter.getExit();
 
       this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
@@ -109,7 +109,9 @@ var LightsOut = (function(lightsOut){
       }
 
       this.roomManager.step();
-      this.nasty.step(this.player);
+      this.enemies.forEach(function(enemy){
+        enemy.step(this.player);
+      }, this);
 
       if (!this.player.isAlive()) {
         this.player.disableControls();
@@ -130,7 +132,10 @@ var LightsOut = (function(lightsOut){
         var game = this.game;
 
         game.debug.geom(new Phaser.Circle(this.player.x, this.player.y, 50));
-        game.debug.geom(new Phaser.Circle(this.nasty.x, this.nasty.y, 50));
+
+        this.enemies.forEach(function(enemy){
+          game.debug.geom(new Phaser.Circle(enemy.x, enemy.y, 50));
+        }, this);
 
         game.debug.bodyInfo(this.player, 10, 10);
 

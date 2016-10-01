@@ -18,7 +18,7 @@ var LightsOut = (function(lightsOut){
     this.keys = this.parseKeys(this.player, mapKeys, this.exit);
     this.roomManager = this.parseRooms(mapRooms, this.player);
     this.navMesh = this.parseNavMesh(mapNavMesh);
-    this.nasty = this.parseEnemy(mapEnemySpawn, this.roomManager, this.navMesh);
+    this.enemies = this.parseEnemies(mapEnemySpawn, this.roomManager, this.navMesh);
   };
 
   lightsOut.MapImporter.prototype.getRoomManager = function() {
@@ -141,26 +141,27 @@ var LightsOut = (function(lightsOut){
     return result;
   };
 
-  lightsOut.MapImporter.prototype.getEnemy = function() {
-    if (this.nasty === undefined) {
+  lightsOut.MapImporter.prototype.getEnemies = function() {
+    if (this.enemies === undefined) {
       throw "The Enemy has not been created yet.";
     }
 
-    return this.nasty;
+    return this.enemies;
   };
 
-  lightsOut.MapImporter.prototype.parseEnemy = function(mapEnemySpawn, roomManager, navMesh) {
-    if (mapEnemySpawn.length != 1) {
-      throw "Only one element is permitted in the enemy spawn layer. Instead, there " +
-        "were " + mapEnemySpawn.length;
+  lightsOut.MapImporter.prototype.parseEnemies = function(mapEnemySpawn, roomManager, navMesh) {
+    var result = [];
+
+    for (var i = 0; i < mapEnemySpawn.length; i++) {
+      var enemySpawnLocation = mapEnemySpawn[i];
+      var x = enemySpawnLocation.x + enemySpawnLocation.width / 2;
+      var y = enemySpawnLocation.y + enemySpawnLocation.height / 2;
+
+      var enemy = new lightsOut.Nasty(this.game, roomManager, navMesh, x, y);
+      this.zDepth.sprite.add(enemy);
+      result.push(enemy);
     }
 
-    var enemySpawnLocation = mapEnemySpawn[0];
-    var x = enemySpawnLocation.x + enemySpawnLocation.width / 2;
-    var y = enemySpawnLocation.y + enemySpawnLocation.height / 2;
-
-    var result = new lightsOut.Nasty(this.game, roomManager, navMesh, x, y);
-    this.zDepth.sprite.add(result);
     return result;
   };
 
