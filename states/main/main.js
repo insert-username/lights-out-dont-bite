@@ -23,6 +23,7 @@ var LightsOut = (function(lightsOut){
       lightsOut.Player.load(game);
       game.load.tilemap("map", "assets/maps/" + this.mapName, null, Phaser.Tilemap.TILED_JSON);
       game.load.image('wall', 'assets/sprites/wall.png');
+      game.load.image('key', 'assets/sprites/key.png');
       game.load.image('floor', 'assets/tilesets/office-floor.png');
       game.load.image('floor-items', 'assets/tilesets/floor-items.png');
       game.load.image('office-divider', 'assets/tilesets/office-divider.png');
@@ -68,8 +69,9 @@ var LightsOut = (function(lightsOut){
       this.roomManager = mapImporter.getRoomManager();
       this.navMesh = mapImporter.getNavMesh();
       this.player = mapImporter.getPlayer();
+      this.keys = mapImporter.getKeys();
       this.nasty = mapImporter.getEnemy();
-      this.exits = mapImporter.getExits();
+      this.exit = mapImporter.getExit();
 
       this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
 
@@ -96,13 +98,15 @@ var LightsOut = (function(lightsOut){
       }
 
       this.game.physics.arcade.collide(this.player, this.wallLayer);
-      this.game.physics.arcade.overlap(this.player, this.exits, function(player, exit){
-        
-        this.player.disableControls();
-        this.subState = lightsOut.States.Main.SubStates.EXITING;
 
-        this.game.state.start('main', true, false, { mapName: exit.getDestinationMapName() });
-      }, null, this);
+      if (this.exit.isUnlocked()) {
+        this.game.physics.arcade.overlap(this.player, this.exit, function(player, exit){
+          this.player.disableControls();
+          this.subState = lightsOut.States.Main.SubStates.EXITING;
+
+          this.game.state.start('main', true, false, { mapName: exit.getDestinationMapName() });
+        }, null, this);
+      }
 
       this.roomManager.step();
       this.nasty.step(this.player);

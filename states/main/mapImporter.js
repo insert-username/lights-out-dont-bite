@@ -9,14 +9,16 @@ var LightsOut = (function(lightsOut){
     var mapRooms = lightsOut.MapImporter.getObjectLayer(map, "Rooms");
     var mapNavMesh = lightsOut.MapImporter.getObjectLayer(map, "Nav Mesh");
     var mapPlayerSpawn = lightsOut.MapImporter.getObjectLayer(map, "Player Spawn");
+    var mapKeys = lightsOut.MapImporter.getObjectLayer(map, "Keys");
     var mapEnemySpawn = lightsOut.MapImporter.getObjectLayer(map, "Enemy Spawn");
-    var mapExits = lightsOut.MapImporter.getObjectLayer(map, "Exit");
+    var mapExit = lightsOut.MapImporter.getObjectLayer(map, "Exit");
 
     this.player = this.parsePlayer(mapPlayerSpawn);
+    this.exit = this.parseExit(mapExit);
+    this.keys = this.parseKeys(this.player, mapKeys, this.exit);
     this.roomManager = this.parseRooms(mapRooms, this.player);
     this.navMesh = this.parseNavMesh(mapNavMesh);
     this.nasty = this.parseEnemy(mapEnemySpawn, this.roomManager, this.navMesh);
-    this.exits = this.parseExits(mapExits);
   };
 
   lightsOut.MapImporter.prototype.getRoomManager = function() {
@@ -118,6 +120,27 @@ var LightsOut = (function(lightsOut){
     return result;
   };
 
+  lightsOut.MapImporter.prototype.getKeys = function() {
+    if (this.keys === undefined) {
+      throw "The Keys have not been created yet.";
+    }
+
+    return this.keys;
+  };
+
+  lightsOut.MapImporter.prototype.parseKeys = function(player, mapKeys, exit) {
+    var result = [];
+
+    for (var i = 0; i < mapKeys.length; i++) {
+      var mapKey = mapKeys[i];
+      var key = new lightsOut.Key(this.game, mapKey.x, mapKey.y, player, exit);
+      this.zDepth.floorItems.add(key);
+      result.push(key);
+    }
+
+    return result;
+  };
+
   lightsOut.MapImporter.prototype.getEnemy = function() {
     if (this.nasty === undefined) {
       throw "The Enemy has not been created yet.";
@@ -141,24 +164,27 @@ var LightsOut = (function(lightsOut){
     return result;
   };
 
-  lightsOut.MapImporter.prototype.getExits = function() {
-    if (this.exits === undefined) {
-      throw "The Exits have not been created yet.";
+  lightsOut.MapImporter.prototype.getExit = function() {
+    if (this.exit === undefined) {
+      throw "The Exit has not been created yet.";
     }
 
-    return this.exits;
+    return this.exit;
   };
 
-  lightsOut.MapImporter.prototype.parseExits = function(mapExits) {
-    var result = [];
-    
-    for (var i = 0; i < mapExits.length; i++) {
-      var mapExit = mapExits[i];
-      var exit = new lightsOut.Exit(this.game, mapExit.x, mapExit.y, mapExit.width, mapExit.height, mapExit.name);
-      result.push(exit);
+  lightsOut.MapImporter.prototype.parseExit = function(mapExitLayer) {
+    if (mapExitLayer.length != 1) {
+      throw "Map expected to contain one exit."
     }
 
-    return result;
+    var mapExit = mapExitLayer[0];
+
+    if (mapExit.properties.keyCount === undefined) {
+      throw "Map Exit object should define custom property \"keyCount\". " +
+        "This value may be zero if the exit is open by default.";
+    }
+
+    return new lightsOut.Exit(this.game, mapExit.x, mapExit.y, mapExit.width, mapExit.height, mapExit.properties.keyCount, mapExit.name);
   };
 
   lightsOut.MapImporter.getObjectLayer = function(map, objectLayerName) {

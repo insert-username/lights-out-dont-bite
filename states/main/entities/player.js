@@ -25,7 +25,9 @@ var LightsOut = (function(lightsOut){
       up: game.input.keyboard.addKey(Phaser.Keyboard.W),
       down: game.input.keyboard.addKey(Phaser.Keyboard.S),
       left: game.input.keyboard.addKey(Phaser.Keyboard.A),
-      right: game.input.keyboard.addKey(Phaser.Keyboard.D)
+      right: game.input.keyboard.addKey(Phaser.Keyboard.D),
+
+      interact: game.input.keyboard.addKey(Phaser.Keyboard.E)
     };
 
     this.health = 100;
@@ -56,12 +58,21 @@ var LightsOut = (function(lightsOut){
     this.controlsEnabled = false;
   }
 
+  lightsOut.Player.prototype.setInteractiveEntity = function(interactiveEntity) {
+    this.interactiveEntity = interactiveEntity;
+  };
+
   lightsOut.Player.prototype.update = function() {
     // disable controls on death.
     if (!this.controlsEnabled) {
       this.body.acceleration.x = 0;
       this.body.acceleration.y = 0;
       return;
+    }
+
+    if (this.controls.interact.isDown && this.interactiveEntity && this.interactiveEntity.isActive) {
+      this.interactiveEntity.interact();
+      this.interactiveEntity = undefined;
     }
 
     var ddx = 0;
