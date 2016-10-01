@@ -7,7 +7,7 @@ var LightsOut = (function(lightsOut){
     },
 
     create: function () {
-      game.stage.backgroundColor = '#20343B';
+      game.stage.backgroundColor = '#000000';
 
       this.title = game.add.text(0, 0,
         'WASD to move, and E to interact', { font: '20px monospace', fill: "white" });
