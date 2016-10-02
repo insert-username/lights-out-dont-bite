@@ -18,7 +18,7 @@ var LightsOut = (function(lightsOut){
     this.keys = this.parseKeys(this.player, mapKeys, this.exit);
     this.roomManager = this.parseRooms(mapRooms, this.player);
     this.navMesh = this.parseNavMesh(mapNavMesh);
-    this.enemies = this.parseEnemies(mapEnemySpawn, this.roomManager, this.navMesh);
+    this.enemies = this.parseEnemies(mapEnemySpawn, this.player, this.roomManager, this.navMesh);
   };
 
   lightsOut.MapImporter.prototype.getRoomManager = function() {
@@ -149,7 +149,7 @@ var LightsOut = (function(lightsOut){
     return this.enemies;
   };
 
-  lightsOut.MapImporter.prototype.parseEnemies = function(mapEnemySpawn, roomManager, navMesh) {
+  lightsOut.MapImporter.prototype.parseEnemies = function(mapEnemySpawn, player, roomManager, navMesh) {
     var result = [];
 
     for (var i = 0; i < mapEnemySpawn.length; i++) {
@@ -157,7 +157,7 @@ var LightsOut = (function(lightsOut){
       var x = enemySpawnLocation.x + enemySpawnLocation.width / 2;
       var y = enemySpawnLocation.y + enemySpawnLocation.height / 2;
 
-      var enemy = new lightsOut.Nasty(this.game, roomManager, navMesh, x, y);
+      var enemy = new lightsOut.Nasty(this.game, player, roomManager, navMesh, x, y);
       this.zDepth.sprite.add(enemy);
       result.push(enemy);
     }
