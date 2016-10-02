@@ -60,8 +60,8 @@ module.exports.State = {
 };
 
 module.exports.key = "nasty";
-module.exports.load = function(game) {
-  game.load.spritesheet(module.exports.key, "assets/sprites/nasty.png", 50, 50);
+module.exports.load = function(game, assetContext) {
+  game.load.spritesheet(module.exports.key, assetContext("./sprites/nasty.png"), 50, 50);
 };
 
 module.exports.prototype = Object.create(Phaser.Sprite.prototype);

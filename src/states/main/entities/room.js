@@ -67,8 +67,8 @@ module.exports.createRoom = function(game, zDepthManager, navPointIndex, x, y, w
  * Unique key by which room resources may be referenced.
  */
 module.exports.lightingKey = "lighting";
-module.exports.load = function(game) {
-  game.load.spritesheet(module.exports.lightingKey, "assets/sprites/lighting.png", 10, 10);
+module.exports.load = function(game, assetContext) {
+  game.load.spritesheet(module.exports.lightingKey, assetContext("./sprites/lighting.png"), 10, 10);
 };
 
 module.exports.prototype.constructor = module.exports;

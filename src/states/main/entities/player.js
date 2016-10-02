@@ -34,8 +34,8 @@ module.exports = function(game, x, y) {
 
 module.exports.MaxHealth = 100;
 module.exports.key = "player";
-module.exports.load = function(game) {
-  game.load.spritesheet(module.exports.key, "assets/sprites/player.png", 11, 20);
+module.exports.load = function(game, assetContext) {
+  game.load.spritesheet(module.exports.key, assetContext("./sprites/player.png"), 11, 20);
 };
 
 module.exports.prototype = Object.create(Phaser.Sprite.prototype);

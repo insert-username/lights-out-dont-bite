@@ -27,20 +27,22 @@ module.exports = {
       this.game.scale.setUserScale(2, 2);
       this.game.scale.refresh();
 
+      var assetContext = require.context('../../../assets', true, /.*(.png|.json)$/);
+
       // load assets.
-      Room.load(this.game);
-      Nasty.load(this.game);
-      Player.load(this.game);
-      this.game.load.tilemap("map", "assets/maps/" + this.mapName, null, Phaser.Tilemap.TILED_JSON);
-      this.game.load.image('wall', 'assets/sprites/wall.png');
-      this.game.load.image('key', 'assets/sprites/key.png');
-      this.game.load.image('floor', 'assets/tilesets/office-floor.png');
-      this.game.load.image('floor-items', 'assets/tilesets/floor-items.png');
-      this.game.load.image('office-divider', 'assets/tilesets/office-divider.png');
-      this.game.load.image('window', 'assets/tilesets/window.png');
-      this.game.load.image('office-lighting', 'assets/tilesets/office-lighting.png');
-      this.game.load.image('floor-lighting', 'assets/tilesets/floor-lighting.png');
-      this.game.load.image('ceiling-lighting', 'assets/tilesets/ceiling-lighting.png');
+      Room.load(this.game, assetContext);
+      Nasty.load(this.game, assetContext);
+      Player.load(this.game, assetContext);
+
+      this.game.load.tilemap("map", assetContext('./maps/' + this.mapName), null, Phaser.Tilemap.TILED_JSON);
+      this.game.load.image('key', assetContext('./sprites/key.png'));
+      this.game.load.image('floor', assetContext('./tilesets/office-floor.png'));
+      this.game.load.image('floor-items', assetContext('./tilesets/floor-items.png'));
+      this.game.load.image('office-divider', assetContext('./tilesets/office-divider.png'));
+      this.game.load.image('window', assetContext('./tilesets/window.png'));
+      this.game.load.image('office-lighting', assetContext('./tilesets/office-lighting.png'));
+      this.game.load.image('floor-lighting', assetContext('./tilesets/floor-lighting.png'));
+      this.game.load.image('ceiling-lighting', assetContext('./tilesets/ceiling-lighting.png'));
     },
 
     create: function() {
