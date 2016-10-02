@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="16" tileheight="16" nextobjectid="345">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="16" tileheight="16" nextobjectid="296">
  <tileset firstgid="1" name="wall" tilewidth="16" tileheight="16" tilecount="1" columns="1">
   <image source="../../sprites/wall.png" width="16" height="16"/>
  </tileset>
@@ -244,16 +244,26 @@
   <object id="276" type="UNLIT" x="684" y="112" width="60" height="64"/>
   <object id="277" type="LIT" x="744" y="112" width="88" height="64"/>
  </objectgroup>
- <objectgroup name="Nav Mesh" visible="0">
+ <objectgroup name="Nav Mesh">
   <object id="208" x="96" y="224"/>
   <object id="209" x="96" y="160"/>
-  <object id="212" x="96" y="300"/>
-  <object id="213" x="176" y="300"/>
+  <object id="210" x="96" y="112"/>
+  <object id="211" x="176" y="112"/>
+  <object id="212" x="96" y="272"/>
+  <object id="213" x="176" y="272"/>
   <object id="214" x="176" y="192"/>
-  <object id="215" x="256" y="192"/>
   <object id="216" x="304" y="192"/>
   <object id="217" x="336" y="160"/>
   <object id="218" x="336" y="112"/>
+  <object id="219" x="96" y="112">
+   <polyline points="0,0 0,48"/>
+  </object>
+  <object id="220" x="96" y="112">
+   <polyline points="0,0 80,0"/>
+  </object>
+  <object id="221" x="176" y="192">
+   <polyline points="0,0 0,-80"/>
+  </object>
   <object id="222" x="112" y="192"/>
   <object id="223" x="96" y="160">
    <polyline points="0,0 16,32"/>
@@ -261,21 +271,40 @@
   <object id="224" x="96" y="224">
    <polyline points="0,0 16,-32"/>
   </object>
-  <object id="228" x="176" y="192">
-   <polyline points="0,0 80,0"/>
+  <object id="225" x="96" y="272">
+   <polyline points="0,0 0,-48"/>
+  </object>
+  <object id="227" x="176" y="272">
+   <polyline points="0,0 0,-80"/>
   </object>
   <object id="230" x="304" y="192">
    <polyline points="0,0 32,-32"/>
+  </object>
+  <object id="231" x="336" y="160">
+   <polyline points="0,0 0,-48"/>
   </object>
   <object id="232" x="112" y="192">
    <polyline points="0,0 64,0"/>
   </object>
   <object id="246" x="328.333" y="231.667"/>
-  <object id="248" x="428" y="292"/>
-  <object id="249" x="376" y="288"/>
-  <object id="250" x="430" y="224"/>
+  <object id="247" x="328.667" y="264.667"/>
+  <object id="248" x="424" y="264"/>
+  <object id="249" x="376" y="281.333"/>
+  <object id="250" x="424.667" y="232.667"/>
   <object id="254" x="304" y="192">
    <polyline points="0,0 24,40"/>
+  </object>
+  <object id="255" x="328" y="264">
+   <polyline points="0,0 0,-32"/>
+  </object>
+  <object id="256" x="376" y="280">
+   <polyline points="0,0 -48,-16"/>
+  </object>
+  <object id="257" x="424" y="264">
+   <polyline points="0,0 -48,16"/>
+  </object>
+  <object id="258" x="424" y="232">
+   <polyline points="0,0 0,32"/>
   </object>
   <object id="259" x="96" y="160">
    <polyline points="0,0 0,64"/>
@@ -287,6 +316,9 @@
   <object id="279" x="424" y="96"/>
   <object id="280" x="516" y="152"/>
   <object id="281" x="712" y="152"/>
+  <object id="282" x="424" y="232">
+   <polyline points="0,0 0,-72"/>
+  </object>
   <object id="283" x="424" y="96">
    <polyline points="0,0 0,64"/>
   </object>
@@ -296,72 +328,24 @@
   <object id="286" x="516" y="152">
    <polyline points="0,0 196,0"/>
   </object>
-  <object id="290" x="96" y="264"/>
-  <object id="291" x="176" y="264"/>
-  <object id="292" x="176" y="148"/>
-  <object id="294" x="280" y="192"/>
-  <object id="296" x="328" y="288"/>
-  <object id="297" x="324" y="264"/>
-  <object id="298" x="430" y="264"/>
-  <object id="299" x="328" y="232">
-   <polyline points="0,0 -4,32"/>
+  <object id="291" x="96" y="304"/>
+  <object id="292" x="176" y="304"/>
+  <object id="293" x="96" y="272">
+   <polyline points="0,0 0,32"/>
   </object>
-  <object id="300" x="324" y="264">
-   <polyline points="0,0 4,24"/>
+  <object id="294" x="96" y="304">
+   <polyline points="0,0 80,0"/>
   </object>
-  <object id="301" x="328" y="288">
-   <polyline points="0,0 48,0"/>
-  </object>
-  <object id="307" x="176" y="192">
-   <polyline points="0,0 0,-44"/>
-  </object>
-  <object id="309" x="176" y="192">
-   <polyline points="0,0 0,72"/>
-  </object>
-  <object id="310" x="176" y="264">
-   <polyline points="0,0 0,36"/>
-  </object>
-  <object id="311" x="176" y="300">
-   <polyline points="0,0 -80,0"/>
-  </object>
-  <object id="312" x="96" y="300">
-   <polyline points="0,0 0,-36"/>
-  </object>
-  <object id="313" x="96" y="264">
-   <polyline points="0,0 0,-40"/>
-  </object>
-  <object id="314" x="256" y="192">
-   <polyline points="0,0 24,0"/>
-  </object>
-  <object id="315" x="280" y="192">
-   <polyline points="0,0 24,0"/>
-  </object>
-  <object id="321" x="268" y="292"/>
-  <object id="323" x="268" y="292">
-   <polyline points="0,0 60,-4"/>
-  </object>
-  <object id="338" x="428" y="292">
-   <polyline points="0,0 4,-28"/>
-  </object>
-  <object id="339" x="432" y="264">
-   <polyline points="0,0 0,-40"/>
-  </object>
-  <object id="340" x="432" y="224">
-   <polyline points="0,0 -8,-64"/>
-  </object>
-  <object id="341" x="428" y="292">
-   <polyline points="0,0 -52,-4"/>
-  </object>
-  <object id="343" x="336" y="160">
-   <polyline points="0,0 0,-48"/>
+  <object id="295" x="176" y="304">
+   <polyline points="0,0 0,-32"/>
   </object>
  </objectgroup>
  <objectgroup name="Player Spawn" visible="0">
   <object id="233" x="144" y="72"/>
  </objectgroup>
  <objectgroup name="Enemy Spawn">
+  <object id="234" x="136" y="192"/>
   <object id="289" x="316" y="172"/>
-  <object id="344" x="164" y="312"/>
  </objectgroup>
  <objectgroup name="Keys" visible="0">
   <object id="261" x="240" y="32"/>

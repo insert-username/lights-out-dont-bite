@@ -30,10 +30,11 @@ var LightsOut = (function(lightsOut){
       interact: game.input.keyboard.addKey(Phaser.Keyboard.E)
     };
 
-    this.health = 100;
+    this.health = lightsOut.Player.MaxHealth;
     this.controlsEnabled = true;
   }
 
+  lightsOut.Player.MaxHealth = 100;
   lightsOut.Player.key = "player";
   lightsOut.Player.load = function(game) {
     game.load.spritesheet(lightsOut.Player.key, "assets/sprites/player.png", 11, 20);
@@ -41,6 +42,10 @@ var LightsOut = (function(lightsOut){
 
   lightsOut.Player.prototype = Object.create(Phaser.Sprite.prototype);
   lightsOut.Player.prototype.constructor = lightsOut.Player;
+
+  lightsOut.Player.prototype.getHealth = function() {
+    return this.health;
+  };
 
   lightsOut.Player.prototype.isAlive = function() {
     return this.health > 0;

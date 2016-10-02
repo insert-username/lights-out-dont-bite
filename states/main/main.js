@@ -83,6 +83,9 @@ var LightsOut = (function(lightsOut){
       this.game.physics.arcade.enable(this.wallLayer);
       this.game.physics.arcade.enable(this.player);
 
+      var stressMeter = new lightsOut.StressMeter(this.game, this.player, this.enemies);
+      zDepth.ceilingLighting.add(stressMeter);
+
       var style = { font: "32px verdana", fill: "#ff0044", wordWrap: true, wordWrapWidth: 300, align: "center" };
       this.deathText = this.game.add.text(0, 0, "You Are Dead.", style);
       this.deathText.anchor.set(0.5);
