@@ -17,6 +17,10 @@ var LightsOut = (function(lightsOut){
     },
 
     preload: function() {
+      game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+      game.scale.setUserScale(2, 2);
+      game.scale.refresh();
+
       // load assets.
       lightsOut.Room.load(game);
       lightsOut.Nasty.load(game);
