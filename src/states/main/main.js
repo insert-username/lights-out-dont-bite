@@ -1,7 +1,13 @@
-var LightsOut = (function(lightsOut){
-  lightsOut.States = lightsOut.States || {};
+var ZDepth = require('./zDepth');
+var MapImporter = require('./mapImporter');
+var StressMeter = require('./stressMeter');
 
-  lightsOut.States.Main = {
+var Room = require('./entities/room');
+var Player = require('./entities/player');
+var Nasty = require('./entities/nasty');
+
+
+module.exports = {
 
     SubStates: {
       ENTERING: 0,
@@ -17,24 +23,24 @@ var LightsOut = (function(lightsOut){
     },
 
     preload: function() {
-      game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-      game.scale.setUserScale(2, 2);
-      game.scale.refresh();
+      this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+      this.game.scale.setUserScale(2, 2);
+      this.game.scale.refresh();
 
       // load assets.
-      lightsOut.Room.load(game);
-      lightsOut.Nasty.load(game);
-      lightsOut.Player.load(game);
-      game.load.tilemap("map", "assets/maps/" + this.mapName, null, Phaser.Tilemap.TILED_JSON);
-      game.load.image('wall', 'assets/sprites/wall.png');
-      game.load.image('key', 'assets/sprites/key.png');
-      game.load.image('floor', 'assets/tilesets/office-floor.png');
-      game.load.image('floor-items', 'assets/tilesets/floor-items.png');
-      game.load.image('office-divider', 'assets/tilesets/office-divider.png');
-      game.load.image('window', 'assets/tilesets/window.png');
-      game.load.image('office-lighting', 'assets/tilesets/office-lighting.png');
-      game.load.image('floor-lighting', 'assets/tilesets/floor-lighting.png');
-      game.load.image('ceiling-lighting', 'assets/tilesets/ceiling-lighting.png');
+      Room.load(this.game);
+      Nasty.load(this.game);
+      Player.load(this.game);
+      this.game.load.tilemap("map", "assets/maps/" + this.mapName, null, Phaser.Tilemap.TILED_JSON);
+      this.game.load.image('wall', 'assets/sprites/wall.png');
+      this.game.load.image('key', 'assets/sprites/key.png');
+      this.game.load.image('floor', 'assets/tilesets/office-floor.png');
+      this.game.load.image('floor-items', 'assets/tilesets/floor-items.png');
+      this.game.load.image('office-divider', 'assets/tilesets/office-divider.png');
+      this.game.load.image('window', 'assets/tilesets/window.png');
+      this.game.load.image('office-lighting', 'assets/tilesets/office-lighting.png');
+      this.game.load.image('floor-lighting', 'assets/tilesets/floor-lighting.png');
+      this.game.load.image('ceiling-lighting', 'assets/tilesets/ceiling-lighting.png');
     },
 
     create: function() {
@@ -61,7 +67,7 @@ var LightsOut = (function(lightsOut){
       this.wallLayer.debug = this.debugMode;
       map.setCollisionBetween(0, 100, true, this.wallLayer);
 
-      var zDepth = new lightsOut.ZDepth(this.game);
+      var zDepth = new ZDepth(this.game);
       zDepth.wall.add(this.wallLayer);
       zDepth.floor.add(floorLayer);
       zDepth.floorLighting.add(floorLightingLayer);
@@ -69,7 +75,7 @@ var LightsOut = (function(lightsOut){
       zDepth.ceiling.add(ceilingLayer);
       zDepth.ceilingLighting.add(ceilingLightingLayer);
 
-      var mapImporter = new lightsOut.MapImporter(this.game, zDepth, map);
+      var mapImporter = new MapImporter(this.game, zDepth, map);
       this.roomManager = mapImporter.getRoomManager();
       this.navMesh = mapImporter.getNavMesh();
       this.player = mapImporter.getPlayer();
@@ -83,7 +89,7 @@ var LightsOut = (function(lightsOut){
       this.game.physics.arcade.enable(this.wallLayer);
       this.game.physics.arcade.enable(this.player);
 
-      var stressMeter = new lightsOut.StressMeter(this.game, this.player, this.enemies);
+      var stressMeter = new StressMeter(this.game, this.player, this.enemies);
       zDepth.ceilingLighting.add(stressMeter);
 
       var style = { font: "32px verdana", fill: "#ff0044", wordWrap: true, wordWrapWidth: 300, align: "center" };
@@ -95,12 +101,12 @@ var LightsOut = (function(lightsOut){
       this.deathText.visible = false;
       this.deathText.alpha = 0;
 
-      this.subState = lightsOut.States.Main.SubStates.PLAYING;
+      this.subState = module.exports.SubStates.PLAYING;
     },
 
     update: function() {
       // do nothing if the player has died.
-      if (this.subState != lightsOut.States.Main.SubStates.PLAYING) {
+      if (this.subState != module.exports.SubStates.PLAYING) {
         return;
       }
 
@@ -111,7 +117,7 @@ var LightsOut = (function(lightsOut){
       if (this.exit.isUnlocked()) {
         this.game.physics.arcade.overlap(this.player, this.exit, function(player, exit){
           this.player.disableControls();
-          this.subState = lightsOut.States.Main.SubStates.EXITING;
+          this.subState = module.exports.SubStates.EXITING;
 
           this.game.state.start('main', true, false, { mapName: exit.getDestinationMapName() });
         }, null, this);
@@ -121,7 +127,7 @@ var LightsOut = (function(lightsOut){
 
       if (!this.player.isAlive()) {
         this.player.disableControls();
-        this.subState = lightsOut.States.Main.SubStates.DYING;
+        this.subState = module.exports.SubStates.DYING;
         var textFadeIn = this.game.add.tween(this.deathText);
         textFadeIn.to({alpha: 1.0}, 500, Phaser.Easing.Linear.None);
         textFadeIn.start();
@@ -159,7 +165,4 @@ var LightsOut = (function(lightsOut){
         }, this);
       }
     }
-  };
-
-  return LightsOut;
-}(LightsOut || {}));
+};

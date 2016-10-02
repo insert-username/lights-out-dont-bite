@@ -1,0 +1,26 @@
+{
+  "name": "lights-out-dont-bite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/insert-username/lights-out-dont-bite.git"
+  },
+  "author": "Luke Dobinson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/insert-username/lights-out-dont-bite/issues"
+  },
+  "homepage": "https://github.com/insert-username/lights-out-dont-bite#readme",
+  "devDependencies": {
+    "webpack": "^1.13.2"
+  },
+  "dependencies": {
+    "javascript-astar": "^0.4.1",
+    "phaser": "^2.6.2"
+  }
+}
