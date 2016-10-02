@@ -22,6 +22,9 @@ var LightsOut = (function(lightsOut){
     this.runSpeed = 100;
     this.wanderSpeed = 30;
 
+    // Cooldown between wandering cycles in seconds.
+    this.wanderCooldown = 2;
+
     this.state = lightsOut.Nasty.State.WANDERING;
 
     // the maximum distance at which to track the player.
@@ -85,32 +88,15 @@ var LightsOut = (function(lightsOut){
       this.state = lightsOut.Nasty.State.CHASING;
       this.moveToNextNavPoint();
       return;
-    }
-
-    // if a path is queued, just follow it.
-    if (this.path.length != 0) {
+    } else if (this.path.length != 0) {
       this.moveToNextNavPoint();
-      return;
-    } else if (this.state === lightsOut.Nasty.State.WANDER_COOLDOWN) {
-      return;
-    } else if (this.state === lightsOut.Nasty.State.WANDERING) {
+    } else if (this.state != lightsOut.Nasty.State.WANDER_COOLDOWN) {
       this.state = lightsOut.Nasty.State.WANDER_COOLDOWN;
-      this.game.time.events.add(Phaser.Timer.SECOND * 4, function() {
+      this.game.time.events.add(Phaser.Timer.SECOND * this.wanderCooldown, function() {
         this.state = lightsOut.Nasty.State.WANDERING;
+        this.path = this.calculateWanderPath();
       }, this);
-      return;
     }
-
-    // either follow the player directly, or calculate a random
-    // wandering path.
-    var isFollowing = this.canFollow(this.player);
-    this.state = isFollowing ?
-      lightsOut.Nasty.State.CHASING :
-      lightsOut.Nasty.State.WANDERING;
-
-    this.path = isFollowing ?
-      this.calculateFollowPath(this.player) :
-      this.calculateWanderPath();
   };
 
   lightsOut.Nasty.prototype.isInSameRoom = function(player) {
