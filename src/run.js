@@ -1,3 +1,4 @@
+var Phaser = require('Phaser');
 var Main = require('./states/main/main');
 var Menu = require('./states/menu/menu');
 

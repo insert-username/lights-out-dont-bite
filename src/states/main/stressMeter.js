@@ -1,3 +1,4 @@
+var Phaser = require('Phaser');
 var Player = require('./entities/player');
 
 /**
@@ -17,7 +18,7 @@ module.exports = function(game, player, enemies) {
   stressMeterBitmap.context.fillStyle = grad;
   stressMeterBitmap.context.fillRect(0, 0, stressMeterBitmap.width, stressMeterBitmap.height);
 
-  Phaser.Sprite.call(this, game, 0, 0, stressMeterBitmap);
+  Phaser.Sprite.call(this, this.game, 0, 0, stressMeterBitmap);
   this.fixedToCamera = true;
 
   this.period = 3;

@@ -1,3 +1,5 @@
+var AStar = require('javascript-astar');
+
 /**
  * The navmesh provides navigation functionality for sprites.
  */
@@ -53,9 +55,9 @@ module.exports.prototype.pointsAttachedTo = function(i) {
  */
 module.exports.prototype.getPath = function(i0, i1, navPointFilter) {
   var graph = new module.exports.Graph(this.points, navPointFilter);
-  var nodes = astar.search(graph, this.points[i0], this.points[i1]);
+  var nodes = AStar.astar.search(graph, this.points[i0], this.points[i1]);
   nodes.splice(0, 0, this.points[i0]);
-  return nodes;
+  return nodes; 
 };
 
 module.exports.NavPoint = function(index, x, y, attachedIndices) {
@@ -84,9 +86,9 @@ module.exports.Graph.heuristic = function(node0, node1) {
       node1.x, node1.y);
 };
 
-module.exports.Graph.prototype.init = Graph.prototype.init;
-module.exports.Graph.prototype.cleanDirty = Graph.prototype.cleanDirty;
-module.exports.Graph.prototype.markDirty = Graph.prototype.markDirty;
+module.exports.Graph.prototype.init = AStar.Graph.prototype.init;
+module.exports.Graph.prototype.cleanDirty = AStar.Graph.prototype.cleanDirty;
+module.exports.Graph.prototype.markDirty = AStar.Graph.prototype.markDirty;
 module.exports.Graph.prototype.neighbors = function(node) {
   var result = [];
   node.attachedIndices.forEach(function(i){
