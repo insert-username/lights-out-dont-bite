@@ -98,6 +98,8 @@ var LightsOut = (function(lightsOut){
       }
 
       this.game.physics.arcade.collide(this.player, this.wallLayer);
+      this.game.physics.arcade.collide(this.enemies, this.wallLayer);
+      this.game.physics.arcade.collide(this.enemies, this.enemies);
 
       if (this.exit.isUnlocked()) {
         this.game.physics.arcade.overlap(this.player, this.exit, function(player, exit){
@@ -109,9 +111,6 @@ var LightsOut = (function(lightsOut){
       }
 
       this.roomManager.step();
-      this.enemies.forEach(function(enemy){
-        enemy.step(this.player);
-      }, this);
 
       if (!this.player.isAlive()) {
         this.player.disableControls();
@@ -133,22 +132,24 @@ var LightsOut = (function(lightsOut){
 
         game.debug.geom(new Phaser.Circle(this.player.x, this.player.y, 50));
 
-        this.enemies.forEach(function(enemy){
-          game.debug.geom(new Phaser.Circle(enemy.x, enemy.y, 50));
-        }, this);
-
-        game.debug.bodyInfo(this.player, 10, 10);
-
         var navPoints = this.navMesh.points;
         var game = this.game;
         navPoints.forEach(function(point) {
-          var circle = new Phaser.Circle(point.x, point.y, 10);
-          game.debug.geom(circle);
           point.attachedIndices.forEach(function(i) {
             var line = new Phaser.Line(point.x, point.y, navPoints[i].x, navPoints[i].y);
             game.debug.geom(line);
           });
         });
+
+        this.enemies.forEach(function(enemy){
+          game.debug.body(enemy);
+          game.debug.bodyInfo(enemy, 32, 32);
+
+          for (var i = 0; i < enemy.path.length; i++) {
+            game.debug.geom(new Phaser.Circle(enemy.path[i].x, enemy.path[i].y, 30));
+          }
+
+        }, this);
       }
     }
   };
