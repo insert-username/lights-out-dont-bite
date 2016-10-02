@@ -1,4 +1,3 @@
-var Phaser = require('Phaser');
 var Player = require('./entities/player');
 
 /**

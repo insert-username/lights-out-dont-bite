@@ -1,4 +1,6 @@
-var Phaser = require('Phaser');
+require('../lib/pixi.js');
+require('../lib/phaser.js');
+
 var Main = require('./states/main/main');
 var Menu = require('./states/menu/menu');
 

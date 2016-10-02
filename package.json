@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/insert-username/lights-out-dont-bite#readme",
   "devDependencies": {
+    "script-loader": "^0.7.0",
     "webpack": "^1.13.2"
   },
   "dependencies": {
