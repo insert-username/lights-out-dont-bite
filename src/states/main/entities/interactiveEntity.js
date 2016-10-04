@@ -6,14 +6,17 @@
  */
 /**
  * @param player the LightsOut.Player object.
- * @param onInteract callback function which is called exactly once on interact.
+ * @param onInteract callback function which is called exactly once per interaction. 
+ *  This function should return true if the interactive entity should not be destroyed 
+ *  after the interaction.
  * @param onInteractContext the context in which the onInteract callback will be called.
- * @param onActivate optional parameter that will be called whenever the interactive entity is activated.
- * @param onActivateContext optional context for onActivate.
+ * @param onActivationStatus notified each time there is a change to the activation status
+ *  of this entity. Should accept a single boolean parameter: whether the entity is active.
+ * @param onActivationStatusContext optional context for onActivationStatus.
  */
 module.exports = function(game, key, x, y, player, 
   onInteract, onInteractContext, 
-  onActivate, onActivateContext) {
+  onActivationStatus, onActivationStatusContext) {
   
   Phaser.Sprite.call(this, game, x, y, key);
   this.anchor.setTo(0.5, 0.5);
@@ -28,7 +31,6 @@ module.exports = function(game, key, x, y, player,
    */
   this.isEnabled = true;
   this.isActive = false;
-  this.hasInteracted = false;
 
   var highlightRect = game.make.bitmapData(this.width, this.height);
   highlightRect.rect(0, 0, this.width, this.height, 'rgb(255, 255, 255)');
@@ -50,6 +52,7 @@ module.exports.prototype = Object.create(Phaser.Sprite.prototype);
 module.exports.prototype.constructor = module.exports;
 
 module.exports.prototype.update = function() {
+  var wasActive = this.isActive;
   this.isActive = false;
   if (!this.isEnabled) {
     return;
@@ -63,13 +66,13 @@ module.exports.prototype.update = function() {
   if (this.isActive) {
     // ensure tween is running
     this.flashTween.resume();
-    
-    if (this.onActivate != undefined) {
-      this.onActivate.call(this.onActivateContext);
-    }
   } else {
     this.flashTween.pause();
     this.overlaySprite.alpha = 0;
+  }
+
+  if (this.isActive != wasActive && this.onActivationStatus != undefined) {
+    this.onActivationStatus.call(this.onActivationStatusContext, this.isActive);
   }
 };
 
@@ -77,16 +80,13 @@ module.exports.prototype.update = function() {
  * Triggers the interaction callback to be called.
  */
 module.exports.prototype.interact = function() {
-    // the interaction function should only be called once.
-    if (this.hasInteracted) {
-        return;
-    }
-    this.hasInteracted = true;
-
     this.player.setInteractiveEntity();
-    this.onInteract.call(this.onInteractContext);
-    this.flashTween.stop();
-    this.destroy();
+    var shouldDestroy = !this.onInteract.call(this.onInteractContext);
+
+    if (shouldDestroy) {
+      this.flashTween.stop();
+      this.destroy();
+    }
 };
 
 /**

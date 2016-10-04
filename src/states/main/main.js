@@ -5,7 +5,8 @@ var StressMeter = require('./stressMeter');
 var Room = require('./entities/room');
 var Player = require('./entities/player');
 var Nasty = require('./entities/nasty');
-
+var Note = require('./entities/note');
+var Door = require('./entities/door');
 
 module.exports = {
 
@@ -36,6 +37,7 @@ module.exports = {
 
       this.game.load.tilemap("map", assetContext('./maps/' + this.mapName), null, Phaser.Tilemap.TILED_JSON);
       this.game.load.image('key', assetContext('./sprites/key.png'));
+      this.game.load.image('note', assetContext('./sprites/note.png'));
       this.game.load.image('floor', assetContext('./tilesets/office-floor.png'));
       this.game.load.image('floor-items', assetContext('./tilesets/floor-items.png'));
       this.game.load.image('office-divider', assetContext('./tilesets/office-divider.png'));
@@ -43,6 +45,8 @@ module.exports = {
       this.game.load.image('office-lighting', assetContext('./tilesets/office-lighting.png'));
       this.game.load.image('floor-lighting', assetContext('./tilesets/floor-lighting.png'));
       this.game.load.image('ceiling-lighting', assetContext('./tilesets/ceiling-lighting.png'));
+      this.game.load.image('hdoor', assetContext('./sprites/hdoor.png'));
+      this.game.load.image('vdoor', assetContext('./sprites/vdoor.png'));
     },
 
     create: function() {
@@ -83,6 +87,11 @@ module.exports = {
       this.keys = mapImporter.getKeys();
       this.enemies = mapImporter.getEnemies();
       this.exit = mapImporter.getExit();
+      this.doorMap = mapImporter.getDoors();
+      this.doors = [];
+      for (var doorName in this.doorMap) {
+        this.doors.push(this.doorMap[doorName]);
+      }
 
       this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
 
@@ -103,6 +112,10 @@ module.exports = {
       this.deathText.alpha = 0;
 
       this.subState = module.exports.SubStates.PLAYING;
+
+      zDepth.floorItems.add(new Note(this.game, 'note', this.player.x + 20, this.player.y + 20, this.player, "Welcome to overtime!",
+        () =>
+          this.doors.forEach(d => d.open()) ));
     },
 
     update: function() {
@@ -112,6 +125,7 @@ module.exports = {
       }
 
       this.game.physics.arcade.collide(this.player, this.wallLayer);
+      this.game.physics.arcade.collide(this.player, this.doors);
       this.game.physics.arcade.collide(this.enemies, this.wallLayer);
       this.game.physics.arcade.collide(this.enemies, this.enemies);
 
@@ -157,13 +171,14 @@ module.exports = {
 
         this.enemies.forEach(function(enemy){
           game.debug.body(enemy);
-          game.debug.bodyInfo(enemy, 32, 32);
 
           for (var i = 0; i < enemy.path.length; i++) {
             game.debug.geom(new Phaser.Circle(enemy.path[i].x, enemy.path[i].y, 30));
           }
 
         }, this);
+
+        this.doors.forEach(d => game.debug.body(d));
       }
     }
 };

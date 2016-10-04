@@ -6,6 +6,7 @@ var Nasty = require('./entities/nasty');
 var Key = require('./entities/key');
 var Room = require('./entities/room');
 var Exit = require('./entities/exit');
+var Door = require('./entities/door');
 
 /**
  * Imports a tiled map to create game objects.
@@ -19,6 +20,7 @@ module.exports = function(game, zDepth, map) {
   var mapKeys = module.exports.getObjectLayer(map, "Keys");
   var mapEnemySpawn = module.exports.getObjectLayer(map, "Enemy Spawn");
   var mapExit = module.exports.getObjectLayer(map, "Exit");
+  var mapDoors = module.exports.getObjectLayer(map, "Doors");
 
   this.player = this.parsePlayer(mapPlayerSpawn);
   this.exit = this.parseExit(mapExit);
@@ -26,6 +28,7 @@ module.exports = function(game, zDepth, map) {
   this.roomManager = this.parseRooms(mapRooms, this.player);
   this.navMesh = this.parseNavMesh(mapNavMesh);
   this.enemies = this.parseEnemies(mapEnemySpawn, this.player, this.roomManager, this.navMesh);
+  this.doors = this.parseDoors(mapDoors);
 };
 
 module.exports.prototype.getRoomManager = function() {
@@ -194,6 +197,44 @@ module.exports.prototype.parseExit = function(mapExitLayer) {
 
   return new Exit(this.game, mapExit.x, mapExit.y, mapExit.width, mapExit.height, mapExit.properties.keyCount, mapExit.name);
 };
+
+module.exports.prototype.parseDoors = function(mapDoors) {
+  var result = {};
+  
+  mapDoors.forEach(d => {
+    if (d.name === undefined) {
+      throw "Doors must provide a value for the name property.";
+    }
+
+    if (result[d.name] != undefined) {
+      throw "Door names must be unique. The door name: \"" + d.name + "\" has already been used in this map.";
+    }
+
+    var rotation = d.properties.rotation;
+    var isOpen = d.properties.isOpen;
+
+    if (rotation === undefined || isOpen === undefined) {
+      throw "Doors must provide values for the \"rotation\" and \"isOpen\" properties.";
+    }
+
+    var door = new Door(this.game, d.x + d.width / 2, d.y + d.height / 2, parseInt(rotation), isOpen === "true");
+    this.zDepth.wall.add(door);
+    result[d.name] = door;
+  });
+
+  return result;
+};
+
+/**
+ * Returns the map of door names to door objects.
+ */
+module.exports.prototype.getDoors = function() {
+  if (this.doors === undefined) {
+    throw "The Doors have not been created yet.";
+  }
+
+  return this.doors;
+}
 
 module.exports.getObjectLayer = function(map, objectLayerName) {
   var objectLayer = map.objects[objectLayerName];
