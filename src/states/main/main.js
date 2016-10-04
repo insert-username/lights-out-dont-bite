@@ -46,7 +46,7 @@ module.exports = {
     },
 
     create: function() {
-      map = this.game.add.tilemap('map');
+      var map = this.game.add.tilemap('map');
       this.map = map;
 
       map.addTilesetImage('floor', 'floor');
