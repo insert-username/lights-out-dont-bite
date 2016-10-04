@@ -366,6 +366,34 @@
         }, 
         {
          "draworder":"topdown",
+         "height":30,
+         "name":"Notes",
+         "objects":[
+                {
+                 "height":0,
+                 "id":304,
+                 "name":"",
+                 "properties":
+                    {
+                     "opens":"A1, A2",
+                     "text":"Read notes to open doors!"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":188,
+                 "y":104
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":60,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "height":0,
          "name":"Nav Mesh",
          "objects":[
@@ -1277,7 +1305,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":0,
          "x":0,
          "y":0
@@ -1304,7 +1332,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":0,
          "x":0,
          "y":0
@@ -1346,7 +1374,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":0,
          "x":0,
          "y":0
@@ -1508,7 +1536,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":0,
          "x":0,
          "y":0
@@ -1535,12 +1563,12 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":0,
          "x":0,
          "y":0
         }],
- "nextobjectid":304,
+ "nextobjectid":305,
  "orientation":"orthogonal",
  "properties":
     {
@@ -1569,7 +1597,7 @@
          "firstgid":2,
          "image":"..\/tilesets\/office-floor.png",
          "imageheight":16,
-         "imagewidth":192,
+         "imagewidth":112,
          "margin":0,
          "name":"floor",
          "properties":
@@ -1585,7 +1613,7 @@
          "firstgid":14,
          "image":"..\/tilesets\/window.png",
          "imageheight":16,
-         "imagewidth":128,
+         "imagewidth":64,
          "margin":0,
          "name":"window",
          "properties":

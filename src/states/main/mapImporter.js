@@ -7,6 +7,7 @@ var Key = require('./entities/key');
 var Room = require('./entities/room');
 var Exit = require('./entities/exit');
 var Door = require('./entities/door');
+var Note = require('./entities/note');
 
 /**
  * Imports a tiled map to create game objects.
@@ -21,6 +22,7 @@ module.exports = function(game, zDepth, map) {
   var mapEnemySpawn = module.exports.getObjectLayer(map, "Enemy Spawn");
   var mapExit = module.exports.getObjectLayer(map, "Exit");
   var mapDoors = module.exports.getObjectLayer(map, "Doors");
+  var mapNotes = module.exports.getObjectLayer(map, "Notes");
 
   this.player = this.parsePlayer(mapPlayerSpawn);
   this.exit = this.parseExit(mapExit);
@@ -29,6 +31,7 @@ module.exports = function(game, zDepth, map) {
   this.navMesh = this.parseNavMesh(mapNavMesh);
   this.enemies = this.parseEnemies(mapEnemySpawn, this.player, this.roomManager, this.navMesh);
   this.doors = this.parseDoors(mapDoors);
+  this.notes = this.parseNotes(mapNotes, this.player, this.doors);
 };
 
 module.exports.prototype.getRoomManager = function() {
@@ -234,6 +237,42 @@ module.exports.prototype.getDoors = function() {
   }
 
   return this.doors;
+};
+
+module.exports.prototype.parseNotes = function(mapNotes, player, doors) {
+  var result = [];
+  
+  mapNotes.forEach(mapNote => {
+
+    var text = mapNote.properties.text;
+    var opens = mapNote.properties.opens.split(",").map(name => name.trim());
+
+    var note = new Note(this.game, 'note', mapNote.x, mapNote.y, player, text, () => {
+      opens.forEach(doorName => {
+        var door = doors[doorName];
+
+        if (door === undefined) {
+          throw "Unable to locate door with name :\"" + doorName + "\"";
+        }
+
+        door.open();
+      });
+    });
+    
+    this.zDepth.floorItems.add(note);
+
+    result.push();
+  });
+
+  return result;
+};
+
+module.exports.prototype.getNotes = function() {
+  if (this.notes === undefined) {
+    throw "The notes have not been created yet.";
+  }
+
+  return this.notes;
 }
 
 module.exports.getObjectLayer = function(map, objectLayerName) {

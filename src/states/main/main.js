@@ -92,6 +92,7 @@ module.exports = {
       for (var doorName in this.doorMap) {
         this.doors.push(this.doorMap[doorName]);
       }
+      this.notes = mapImporter.getNotes();
 
       this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
 
@@ -112,10 +113,6 @@ module.exports = {
       this.deathText.alpha = 0;
 
       this.subState = module.exports.SubStates.PLAYING;
-
-      zDepth.floorItems.add(new Note(this.game, 'note', this.player.x + 20, this.player.y + 20, this.player, "Welcome to overtime!",
-        () =>
-          this.doors.forEach(d => d.open()) ));
     },
 
     update: function() {
