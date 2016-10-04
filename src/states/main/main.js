@@ -49,7 +49,6 @@ module.exports = {
       map = this.game.add.tilemap('map');
       this.map = map;
 
-      map.addTilesetImage('wall', 'wall');
       map.addTilesetImage('floor', 'floor');
       map.addTilesetImage('office-divider', 'office-divider');
       map.addTilesetImage('floor-items', 'floor-items');
