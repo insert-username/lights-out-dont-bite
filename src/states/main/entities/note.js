@@ -2,10 +2,18 @@ var InteractiveEntity = require('./interactiveEntity');
 
 class Note extends InteractiveEntity {
 
-  constructor(game, x, y, player, text) {
-    super(game, 'note', x, y, player, Note.prototype.onInteract, Note.prototype.onActivationStatus);
+  /**
+   * @param text the text to display on the note.
+   * @param onRead called once the player has read and closed the note.
+   * @param onReadContext context for the onRead callback.
+   */
+  constructor(game, key, x, y, player, text, onRead, onReadContext) {
+    super(game, key, x, y, player, Note.prototype.onInteract, Note.prototype.onActivationStatus);
     this.onInteractContext = this;
     this.onActivationStatusContext = this;
+
+    this.onRead = onRead;
+    this.onReadContext = onReadContext;
 
     this.game = game;
     
@@ -43,6 +51,10 @@ class Note extends InteractiveEntity {
       this.tween.onComplete.add(() => {
         this.text.visible = false;
         this.tween = false;
+
+        if (this.onRead != undefined) {
+          this.onRead.call(this.onReadContext);
+        }
       });
       this.isOpen = false;
     } else {
