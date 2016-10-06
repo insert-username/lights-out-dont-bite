@@ -21,7 +21,7 @@ module.exports = {
       this.game.camera.view.height / 2 + 80);
 
     this.game.input.keyboard.onDownCallback = function () {
-      this.game.state.start('main', true, true, { mapName: "00.json" });
+      this.game.state.start('main', true, true, { mapName: "00-lobby-day.json" });
       this.game.input.keyboard.onDownCallback = null;
     };
   },

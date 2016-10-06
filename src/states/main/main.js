@@ -43,6 +43,7 @@ module.exports = {
       this.game.load.image('office-divider', assetContext('./tilesets/office-divider.png'));
       this.game.load.image('window', assetContext('./tilesets/window.png'));
       this.game.load.image('office-lighting', assetContext('./tilesets/office-lighting.png'));
+      this.game.load.spritesheet('office-worker', assetContext('./sprites/office-worker.png'), 16, 32, 2);
       this.game.load.image('floor-lighting', assetContext('./tilesets/floor-lighting.png'));
       this.game.load.image('ceiling-lighting', assetContext('./tilesets/ceiling-lighting.png'));
       this.game.load.image('hdoor', assetContext('./sprites/hdoor.png'));

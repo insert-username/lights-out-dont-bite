@@ -12,7 +12,7 @@ module.exports = function(game, x, y, width, height, keyCount, destinationMapNam
   this.body.height = height;
   this.body.x = x;
   this.body.y = y;
-  this.keyCount = keyCount;
+  this.keyCount = parseInt(keyCount);
 
   this.destinationMapName = destinationMapName;
 

@@ -24,7 +24,7 @@ module.exports = function(game, player, enemies) {
   this.minAlpha = 0;
   this.maxAlpha = 0;
 
-  this.detectionRange = 200;
+  this.detectionRange = 100;
 };
 
 module.exports.prototype = Object.create(Phaser.Sprite.prototype);
@@ -39,12 +39,12 @@ module.exports.prototype.update = function() {
     }
   }, this);
 
-  this.maxAlpha = closestEnemyDistance < this.detectionRange ?
+  this.maxAlpha = closestEnemyDistance < this.detectionRange && closestEnemyDistance != -1 ?
     (this.detectionRange - closestEnemyDistance) / this.detectionRange :
     0;
   this.minAlpha = this.maxAlpha * 0.2;
 
-  this.period = 2 + this.player.getHealth() / Player.MaxHealth;
+  this.period = (2 - this.maxAlpha) + this.player.getHealth() / Player.MaxHealth;
 
   this.updateAlpha();
 };

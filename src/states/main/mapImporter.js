@@ -245,9 +245,16 @@ module.exports.prototype.parseNotes = function(mapNotes, player, doors) {
   mapNotes.forEach(mapNote => {
 
     var text = mapNote.properties.text;
-    var opens = mapNote.properties.opens.split(",").map(name => name.trim());
+    var opens = mapNote.properties.opens.split(",")
+      .map(name => name.trim())
+      .filter(name => name != "");
+      
+    var sprite = mapNote.properties.sprite;
+    sprite = sprite === undefined ?
+      'note' :
+      sprite;
 
-    var note = new Note(this.game, 'note', mapNote.x, mapNote.y, player, text, () => {
+    var note = new Note(this.game, sprite, mapNote.x, mapNote.y, player, text, () => {
       opens.forEach(doorName => {
         var door = doors[doorName];
 
