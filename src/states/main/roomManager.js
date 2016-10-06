@@ -8,13 +8,13 @@ var Room = require('./entities/room');
 /**
  * Creates a new room manager.
  * @param game the current Phaser.Game.
- * @param torchSprite a sprite which partially illuminates rooms. Rooms
+ * @param player the player sprite. Rooms
  * containing this sprite that are otherwise unlit will have their lit
  * state set to SEMI_LIT. Lit rooms are not affected by the torch sprite.
  */
-module.exports = function(game, torchSprite) {
+module.exports = function(game, player) {
   this.game = game;
-  this.torchSprite = torchSprite;
+  this.player = player;
   this.rooms = [];
 };
 
@@ -46,15 +46,23 @@ module.exports.prototype.getContainingRoom = function(sprite) {
 };
 
 module.exports.prototype.step = function() {
-  var semiLitRoom = this.getContainingRoom(this.torchSprite);
-  if (semiLitRoom.getIllumination() == Room.State.UNLIT) {
-    semiLitRoom.setIllumination(Room.State.SEMI_LIT);
-  }
-
   // all other semi-lit rooms will be darkened as the player
   // has left them.
-  this.rooms.forEach(function(room) {
-    if (room != semiLitRoom && room.getIllumination() == Room.State.SEMI_LIT) {
+  this.rooms.forEach(room => {
+    if (room.getIllumination() === Room.State.LIT) {
+      return;
+    }
+
+    var illuminated = false;
+    this.game.physics.arcade.collide(this.player.getLightingBounds(), room.getLightingSprite(), (playerLighting, roomLighting) => {
+      if (room.getIllumination() === Room.State.UNLIT) {
+        room.setIllumination(Room.State.SEMI_LIT);
+      }
+
+      illuminated = true;
+    });
+
+    if (!illuminated) {
       room.setIllumination(Room.State.UNLIT);
     }
   });

@@ -13,6 +13,8 @@ module.exports = function(game, zDepthManager,
    * and a value of 0.0 indicates full visibility.
    */
   this.lighting = game.add.tileSprite(x, y, width, height, module.exports.lightingKey);
+  game.physics.arcade.enable(this.lighting);
+  this.lighting.body.immovable = true;
   zDepthManager.ceilingLighting.add(this.lighting);
 
   /**
@@ -23,7 +25,10 @@ module.exports = function(game, zDepthManager,
   this.lightingFlickerPeriodSeconds = 5;
   game.time.events.loop(Phaser.Timer.SECOND * this.lightingFlickerPeriodSeconds / 50, this.updateLightingAlpha, this);
   game.time.events.start();
-  this.setState("LIT", 1000);
+};
+
+module.exports.prototype.getLightingSprite = function() {
+  return this.lighting;
 };
 
 /**
@@ -53,7 +58,7 @@ module.exports.State = {
 
 module.exports.State.Alpha = {
   LIT : 0.1,
-  SEMI_LIT : 0.5,
+  SEMI_LIT : 0.6,
   UNLIT : 0.95
 };
 
@@ -106,7 +111,7 @@ module.exports.prototype.getIllumination = function(state) {
  * @param state one of : module.exports.State.
  */
 module.exports.prototype.setIllumination = function(state) {
-  this.setState(state, 1000);
+  this.setState(state, 500);
 };
 
 /**

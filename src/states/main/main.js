@@ -176,6 +176,8 @@ module.exports = {
 
         }, this);
 
+        game.debug.body(this.player.getLightingBounds());
+
         this.doors.forEach(d => game.debug.body(d));
       }
     }
