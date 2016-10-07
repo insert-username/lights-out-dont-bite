@@ -40,10 +40,7 @@ module.exports = function(game, x, y) {
 }
 
 module.exports.MaxHealth = 100;
-module.exports.key = "player";
-module.exports.load = function(game, assetContext) {
-  game.load.spritesheet(module.exports.key, assetContext("./sprites/player.png"), 11, 20);
-};
+module.exports.key = "dave";
 
 module.exports.prototype = Object.create(Phaser.Sprite.prototype);
 module.exports.prototype.constructor = module.exports;
@@ -94,19 +91,19 @@ module.exports.prototype.update = function() {
   var ddx = 0;
   var ddy = 0;
 
-  if (this.controls.left.isDown) {
+  if (this.controls.left.isDown && !this.body.touching.left) {
     ddx -= this.walkAcceleration;
   }
 
-  if (this.controls.right.isDown) {
+  if (this.controls.right.isDown && !this.body.touching.right) {
     ddx += this.walkAcceleration;
   }
 
-  if (this.controls.up.isDown) {
+  if (this.controls.up.isDown && !this.body.touching.up) {
     ddy -= this.walkAcceleration;
   }
 
-  if (this.controls.down.isDown) {
+  if (this.controls.down.isDown && !this.body.touching.down) {
     ddy += this.walkAcceleration;
   }
 

@@ -24,20 +24,21 @@ module.exports = {
     },
 
     preload: function() {
-      this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-      this.game.scale.setUserScale(2, 2);
-      this.game.scale.refresh();
+      // this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+      // this.game.scale.setUserScale(2, 2);
+      // this.game.scale.refresh();
 
       var assetContext = require.context('../../../assets', true, /.*(.png|.json)$/);
 
       // load assets.
       Room.load(this.game, assetContext);
       Nasty.load(this.game, assetContext);
-      Player.load(this.game, assetContext);
 
       this.game.load.tilemap("map", assetContext('./maps/' + this.mapName), null, Phaser.Tilemap.TILED_JSON);
       this.game.load.image('key', assetContext('./sprites/key.png'));
       this.game.load.image('note', assetContext('./sprites/note.png'));
+      this.game.load.image('buzzer', assetContext('./sprites/buzzer.png'));
+      this.game.load.spritesheet('dave', assetContext('./sprites/dave.png'), 16, 32);
       this.game.load.image('floor', assetContext('./tilesets/office-floor.png'));
       this.game.load.image('floor-items', assetContext('./tilesets/floor-items.png'));
       this.game.load.image('office-divider', assetContext('./tilesets/office-divider.png'));

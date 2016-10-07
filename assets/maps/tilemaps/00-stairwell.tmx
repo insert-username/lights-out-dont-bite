@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="16" tileheight="16" nextobjectid="348">
+ <tileset firstgid="1" name="floor" tilewidth="16" tileheight="16" tilecount="27">
+  <image source="../../tilesets/office-floor.png" width="432" height="16"/>
+ </tileset>
+ <tileset firstgid="28" name="window" tilewidth="16" tileheight="16" tilecount="25">
+  <image source="../../tilesets/window.png" width="400" height="16"/>
+ </tileset>
+ <tileset firstgid="53" name="office-divider" tilewidth="16" tileheight="16" tilecount="27">
+  <image source="../../tilesets/office-divider.png" width="432" height="16"/>
+ </tileset>
+ <tileset firstgid="80" name="floor-items" tilewidth="16" tileheight="16" tilecount="14">
+  <image source="../../tilesets/floor-items.png" width="224" height="16"/>
+ </tileset>
+ <tileset firstgid="94" name="office-lighting" tilewidth="16" tileheight="16" tilecount="8">
+  <image source="../../tilesets/office-lighting.png" width="128" height="16"/>
+ </tileset>
+ <tileset firstgid="102" name="floor-lighting" tilewidth="16" tileheight="16" tilecount="20">
+  <image source="../../tilesets/floor-lighting.png" width="160" height="32"/>
+ </tileset>
+ <tileset firstgid="122" name="ceiling-lighting" tilewidth="16" tileheight="16" tilecount="4">
+  <image source="../../tilesets/ceiling-lighting.png" width="64" height="16"/>
+ </tileset>
+ <tileset firstgid="126" name="floor-numbers" tilewidth="16" tileheight="16" tilecount="16">
+  <image source="../../tilesets/floor-numbers.png" width="128" height="32"/>
+ </tileset>
+ <layer name="Floor" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,22,22,22,22,22,22,0,0,
+0,0,22,22,22,22,22,22,0,0,
+0,0,22,22,22,22,22,22,0,0,
+0,0,25,25,25,23,23,23,0,0,
+0,0,26,26,26,24,24,24,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="FloorItems" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,88,0,0,
+0,0,0,0,0,0,90,0,0,0,
+0,0,0,0,0,0,91,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="FloorLighting" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,80,0,0,
+0,0,0,0,0,0,0,83,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Walls" width="10" height="10">
+  <data encoding="csv">
+0,59,61,61,61,61,61,61,59,0,
+0,59,60,60,60,60,60,60,59,0,
+0,59,0,0,0,0,0,0,59,0,
+0,59,0,0,0,0,0,0,59,0,
+0,59,0,0,0,0,0,0,59,0,
+0,59,0,0,0,0,0,0,59,0,
+0,59,0,0,0,108,109,110,59,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Ceiling" width="10" height="10">
+  <data encoding="csv">
+0,0,0,126,127,128,130,0,0,0,
+0,0,0,134,135,136,138,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="CeilingLighting" width="10" height="10">
+  <data encoding="csv">
+0,0,53,0,0,0,0,53,0,0,
+0,0,53,0,0,0,0,53,0,0,
+0,0,53,0,0,0,0,53,0,0,
+0,0,53,0,0,0,0,53,0,0,
+0,0,53,0,0,0,0,53,0,0,
+0,0,53,0,0,0,0,53,0,0,
+0,0,53,0,0,108,0,53,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="Rooms">
+  <object id="344" type="LIT" x="32" y="0" width="96" height="112"/>
+ </objectgroup>
+ <objectgroup name="Doors"/>
+ <objectgroup name="Notes"/>
+ <objectgroup name="Nav Mesh"/>
+ <objectgroup name="Player Spawn">
+  <object id="345" x="48" y="44"/>
+ </objectgroup>
+ <objectgroup name="Enemy Spawn"/>
+ <objectgroup name="Keys"/>
+ <objectgroup name="Exit">
+  <object id="346" x="32" y="96" width="48" height="16"/>
+ </objectgroup>
+</map>
