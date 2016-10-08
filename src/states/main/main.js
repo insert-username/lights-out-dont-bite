@@ -47,6 +47,7 @@ module.exports = {
       this.game.load.spritesheet('office-worker', assetContext('./sprites/office-worker.png'), 16, 32, 2);
       this.game.load.image('floor-lighting', assetContext('./tilesets/floor-lighting.png'));
       this.game.load.image('ceiling-lighting', assetContext('./tilesets/ceiling-lighting.png'));
+      this.game.load.image('floor-numbers', assetContext('./tilesets/floor-numbers.png'));
       this.game.load.image('hdoor', assetContext('./sprites/hdoor.png'));
       this.game.load.image('vdoor', assetContext('./sprites/vdoor.png'));
     },
@@ -60,6 +61,7 @@ module.exports = {
       map.addTilesetImage('floor-items', 'floor-items');
       map.addTilesetImage('window', 'window');
       map.addTilesetImage('office-lighting', 'office-lighting');
+      map.addTilesetImage('floor-numbers', 'floor-numbers');
       map.addTilesetImage('floor-lighting', 'floor-lighting');
       map.addTilesetImage('ceiling-lighting', 'ceiling-lighting');
 
@@ -117,6 +119,12 @@ module.exports = {
       this.subState = module.exports.SubStates.PLAYING;
     },
 
+    triggerMapTransition: function(destinationMapName) {
+      this.player.disableControls();
+      this.subState = module.exports.SubStates.EXITING;
+      this.game.state.start('main', true, false, { mapName: destinationMapName });
+    },
+
     update: function() {
       // do nothing if the player has died.
       if (this.subState != module.exports.SubStates.PLAYING) {
@@ -130,10 +138,8 @@ module.exports = {
 
       if (this.exit.isUnlocked()) {
         this.game.physics.arcade.overlap(this.player, this.exit, function(player, exit){
-          this.player.disableControls();
-          this.subState = module.exports.SubStates.EXITING;
-
-          this.game.state.start('main', true, false, { mapName: exit.getDestinationMapName() });
+          console.log("called");
+          this.triggerMapTransition(exit.getDestinationMapName());
         }, null, this);
       }
 

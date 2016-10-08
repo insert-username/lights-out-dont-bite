@@ -203,7 +203,7 @@ module.exports.prototype.parseExit = function(mapExitLayer) {
 
 module.exports.prototype.parseDoors = function(mapDoors) {
   var result = {};
-  
+
   mapDoors.forEach(d => {
     if (d.name === undefined) {
       throw "Doors must provide a value for the name property.";
@@ -241,31 +241,48 @@ module.exports.prototype.getDoors = function() {
 
 module.exports.prototype.parseNotes = function(mapNotes, player, doors) {
   var result = [];
-  
+
   mapNotes.forEach(mapNote => {
 
     var text = mapNote.properties.text;
-    var opens = mapNote.properties.opens.split(",")
-      .map(name => name.trim())
-      .filter(name => name != "");
-      
+    var opens = mapNote.properties["opens"];
+
+    var destinationMapName = mapNote.properties["triggers-map-transition"];
+
+    var onReadCallback = () => {};
+
+    if (destinationMapName === undefined && opens === undefined) {
+      // do nothing
+    } else if (destinationMapName === undefined) {
+      opens = opens.split(",")
+        .map(name => name.trim())
+        .filter(name => name != "");
+      onReadCallback = () =>
+        opens.forEach(doorName => {
+          var door = doors[doorName];
+
+          if (door === undefined) {
+            throw "Unable to locate door with name :\"" + doorName + "\"";
+          }
+
+          door.open();
+        });
+    } else if (opens === undefined) {
+      onReadCallback = () =>
+        {
+          this.game.state.getCurrentState().triggerMapTransition(destinationMapName);
+        }
+    } else {
+      throw "Properties \"opens\" and \"triggers-map-transition\" are mutually exclusive.";
+    }
+
     var sprite = mapNote.properties.sprite;
     sprite = sprite === undefined ?
       'note' :
       sprite;
 
-    var note = new Note(this.game, sprite, mapNote.x, mapNote.y, player, text, () => {
-      opens.forEach(doorName => {
-        var door = doors[doorName];
+    var note = new Note(this.game, sprite, mapNote.x, mapNote.y, player, text, onReadCallback);
 
-        if (door === undefined) {
-          throw "Unable to locate door with name :\"" + doorName + "\"";
-        }
-
-        door.open();
-      });
-    });
-    
     this.zDepth.floorItems.add(note);
 
     result.push();
