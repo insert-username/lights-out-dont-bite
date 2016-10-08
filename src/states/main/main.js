@@ -50,6 +50,7 @@ module.exports = {
       this.game.load.image('floor-numbers', assetContext('./tilesets/floor-numbers.png'));
       this.game.load.image('hdoor', assetContext('./sprites/hdoor.png'));
       this.game.load.image('vdoor', assetContext('./sprites/vdoor.png'));
+      this.game.load.image('computer', assetContext('./sprites/computer.png'));
     },
 
     create: function() {

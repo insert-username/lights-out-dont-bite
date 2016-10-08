@@ -79,8 +79,8 @@ module.exports.prototype.update = function() {
 
   // disable controls on death.
   if (!this.controlsEnabled) {
-    this.body.acceleration.x = 0;
-    this.body.acceleration.y = 0;
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
     return;
   }
 
@@ -108,6 +108,6 @@ module.exports.prototype.update = function() {
     ddy += this.walkAcceleration;
   }
 
-  this.body.acceleration.x = ddx;
-  this.body.acceleration.y = ddy;
+  this.body.velocity.x = ddx;
+  this.body.velocity.y = ddy;
 }
