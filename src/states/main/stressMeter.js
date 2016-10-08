@@ -10,7 +10,7 @@ module.exports = function(game, player, enemies) {
   this.enemies = enemies;
 
   var stressMeterBitmap = this.game.make.bitmapData(this.game.camera.width, this.game.camera.height);
-  var grad = stressMeterBitmap.context.createRadialGradient(this.game.camera.width / 2, this.game.camera.height / 2, 50, 
+  var grad = stressMeterBitmap.context.createRadialGradient(this.game.camera.width / 2, this.game.camera.height / 2, 50,
     this.game.camera.width / 2, this.game.camera.height / 2, 200);
   grad.addColorStop(0, 'transparent');
   grad.addColorStop(1, '#FF0000');
@@ -24,7 +24,7 @@ module.exports = function(game, player, enemies) {
   this.minAlpha = 0;
   this.maxAlpha = 0;
 
-  this.detectionRange = 100;
+  this.detectionRange = 200;
 };
 
 module.exports.prototype = Object.create(Phaser.Sprite.prototype);

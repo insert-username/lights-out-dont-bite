@@ -138,7 +138,6 @@ module.exports = {
 
       if (this.exit.isUnlocked()) {
         this.game.physics.arcade.overlap(this.player, this.exit, function(player, exit){
-          console.log("called");
           this.triggerMapTransition(exit.getDestinationMapName());
         }, null, this);
       }
