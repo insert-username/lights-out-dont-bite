@@ -54,11 +54,10 @@ module.exports.prototype.step = function() {
     }
 
     var illuminated = false;
-    this.game.physics.arcade.collide(this.player.getLightingBounds(), room.getLightingSprite(), (playerLighting, roomLighting) => {
-      if (room.getIllumination() === Room.State.UNLIT) {
-        room.setIllumination(Room.State.SEMI_LIT);
-      }
+    var lightingBounds = this.player.getLightingBounds();
 
+    this.game.physics.arcade.collide(lightingBounds, room.getLightingSprite(), (playerLighting, roomLighting) => {
+      room.setIllumination(Room.State.SEMI_LIT, lightingBounds.x, lightingBounds.y);
       illuminated = true;
     });
 

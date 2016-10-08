@@ -39,17 +39,7 @@ module.exports.prototype.update = function() {
     }
   }, this);
 
-  this.maxAlpha = closestEnemyDistance < this.detectionRange && closestEnemyDistance != -1 ?
+  this.alpha = closestEnemyDistance < this.detectionRange && closestEnemyDistance != -1 ?
     (this.detectionRange - closestEnemyDistance) / this.detectionRange :
     0;
-  this.minAlpha = this.maxAlpha * 0.2;
-
-  this.period = (2 - this.maxAlpha) + this.player.getHealth() / Player.MaxHealth;
-
-  this.updateAlpha();
-};
-
-module.exports.prototype.updateAlpha = function() {
-  var t = (this.game.time.totalElapsedSeconds() % this.period - this.period / 2) / this.period * 15;
-  this.alpha = this.minAlpha + (this.maxAlpha - this.minAlpha) * Math.min(1, Math.exp(- t * t * 2) + 0.8 * Math.exp(-(t - 3)*(t - 3) * 2));
 };

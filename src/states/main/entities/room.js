@@ -109,29 +109,53 @@ module.exports.prototype.getIllumination = function(state) {
  * Sets the current illumination of the room. A tween is used to
  * smooth the transition, however the state transition is instant.
  * @param state one of : module.exports.State.
+ * @param x, y the x-y coordinates of a sprite which may be causing
+ * the room illumination. For example, if the room is lit by a torch,
+ * these coordinates should be the coordinates of the torch sprite.
  */
-module.exports.prototype.setIllumination = function(state) {
-  this.setState(state, 500);
+module.exports.prototype.setIllumination = function(state, x, y) {
+  if (state === module.exports.State.SEMI_LIT) {
+    if (x === undefined || y === undefined) {
+      throw "When a room is semi-lit, the coordinates of the " +
+        "torch sprite must be specified."
+    }
+
+    var dist = Phaser.Math.distance(this.lighting.x,
+        this.lighting.y, x, y);
+
+    var alpha = Phaser.Math.clamp(
+       dist / 100,
+      0, 1);
+    this.setState(state, 500, alpha);
+  } else {
+    this.setState(state, 500);
+  }
 };
 
 /**
  * @param State must be one of module.exports.State.
  * @param tweenTimeMs the amount of time (in milliseconds) to take
  * to perform the visual state transition.
+ * @param alpha optional alpha value to specify for the state. If this
+ * value is not specified then the default alpha value for this
+ * state is used.
  */
-module.exports.prototype.setState = function(state, tweenTimeMs) {
+module.exports.prototype.setState = function(state, tweenTimeMs, alpha) {
 
   if (module.exports.State[state] == undefined) {
     throw "State: " + state + " is not a valid room state.";
   }
 
   this.state = state;
+  var alphaVal = alpha === undefined ?
+    module.exports.State.Alpha[state] :
+    alpha;
 
-  var alphaVal = module.exports.State.Alpha[state];
+  if (this.state === module.exports.State.SEMI_LIT && alpha === undefined) {
+    throw "A semi lit room should manually specify alpha values.";
+  }
 
-  var lightingTween = this.game.add.tween(this);
-  lightingTween.to( { lightingAlphaMin: alphaVal * 0.95, lightingAlphaMax: alphaVal }, tweenTimeMs, Phaser.Easing.Linear.None);
-  lightingTween.start();
+  this.lighting.alpha = alphaVal;
 };
 
 module.exports.prototype.updateLightingAlpha = function() {

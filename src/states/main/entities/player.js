@@ -31,11 +31,12 @@ module.exports = function(game, x, y) {
   this.health = module.exports.MaxHealth;
   this.controlsEnabled = true;
 
-  var lightingBoundsRadius = 35;
+  var lightingBoundsRadius = 50;
   this.lightingBounds = game.add.sprite(this.x, this.y);
   this.lightingBounds.anchor.setTo(0.5, 0.5);
   game.physics.arcade.enable(this.lightingBounds);
-  this.lightingBounds.body.setCircle(lightingBoundsRadius, -lightingBoundsRadius / 2, -lightingBoundsRadius / 2);
+  this.lightingBounds.body.setCircle(lightingBoundsRadius, -lightingBoundsRadius / 2 - this.width / 2,
+    - lightingBoundsRadius / 2 - this.height / 4);
   this.lightingBounds.body.immovable = true;
 }
 
