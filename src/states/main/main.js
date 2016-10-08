@@ -25,10 +25,6 @@ module.exports = {
     },
 
     preload: function() {
-      // this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-      // this.game.scale.setUserScale(2, 2);
-      // this.game.scale.refresh();
-
       var assetContext = require.context('../../../assets', true, /.*(.png|.json)$/);
 
       // load assets.
