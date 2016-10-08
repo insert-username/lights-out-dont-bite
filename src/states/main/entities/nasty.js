@@ -30,7 +30,7 @@ module.exports = function(game, player, roomManager, navMesh, x, y) {
   // the maximum distance at which to track the player.
   // if the player is further away than this distance, they
   // won't be followed.
-  this.maxPlayerDistance = 200;
+  this.maxPlayerDistance = 40;
 
   // array of x, y locations which are queued for movement.
   this.path = [];
@@ -83,7 +83,7 @@ module.exports.prototype.update = function() {
   }
 
   // if in the same room, always follow the player directly.
-  if (this.isInSameRoom(this.player) && this.canFollow(this.player)) {
+  if (this.canFollow(this.player)) {
     this.path = [ { x: this.player.x, y: this.player.y } ];
     this.state = module.exports.State.CHASING;
     this.moveToNextNavPoint();
@@ -93,8 +93,12 @@ module.exports.prototype.update = function() {
   } else if (this.state != module.exports.State.WANDER_COOLDOWN) {
     this.state = module.exports.State.WANDER_COOLDOWN;
     this.game.time.events.add(Phaser.Timer.SECOND * this.wanderCooldown, function() {
+
+      var path = [];
+      while ((path = this.calculateWanderPath()).length < 2);
+
+      this.path = path;
       this.state = module.exports.State.WANDERING;
-      this.path = this.calculateWanderPath();
     }, this);
   }
 };
@@ -126,13 +130,19 @@ module.exports.prototype.calculateFollowPath = function(player) {
 };
 
 /**
- * Walks towards a random unlit room.
+ * Calculates a path towards a randomly selected unlit room.
+ * A path containing only the current nav point index is returned
+ * if a path could not be randomly selected.
  */
 module.exports.prototype.calculateWanderPath = function() {
-  var navPointIndex = Math.floor(Math.random() * this.navMesh.points.length);
+  var currentNavPointIndex = this.navMesh.closestNavPointIndex(this.x, this.y);
+  var navPointIndex = Math.floor(Math.random() * (this.navMesh.points.length - 1));
+  if (navPointIndex >= currentNavPointIndex) {
+    navPointIndex = navPointIndex + 1;
+  }
+
   var room = this.roomManager.getContainingRoom(this.navMesh.points[navPointIndex]);
   if (room.getIllumination() != Room.State.LIT) {
-    var currentNavPointIndex = this.navMesh.closestNavPointIndex(this.x, this.y);
     return this.navMesh.getPath(currentNavPointIndex, navPointIndex, this.navMeshFilterFunction);
   }
 
