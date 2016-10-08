@@ -17,7 +17,7 @@ module.exports = function(game, wallLayer, player) {
   this.game = game;
   this.wallLayer = wallLayer;
   this.player = player;
-  this.lightSourceNode = LightSourceNode.build(game, 10, 10, 10);
+  this.lightSourceNode = LightSourceNode.build(game, 50, 20, 10);
   this.player.addChild(this.lightSourceNode);
   this.rooms = [];
   this.roomSprites = [];
@@ -63,13 +63,11 @@ module.exports.prototype.step = function() {
 
   var allLightSourceNodes = this.lightSourceNode.flatten();
   allLightSourceNodes.forEach(n => n.setColliding(false));
-  this.game.physics.arcade.collide(allLightSourceNodes, this.wallLayer, (lightingNode, wall) => {
+  this.game.physics.arcade.overlap(allLightSourceNodes, this.wallLayer, (lightingNode, wall) => {
     lightingNode.setColliding(true);
   });
 
   var enabledLightSourceNodes = this.lightSourceNode.flattenEnabled();
-
-  console.log(this.wallLayer);
 
   this.game.physics.arcade.overlap(enabledLightSourceNodes, this.roomSprites,
     (node, roomLighting) => {

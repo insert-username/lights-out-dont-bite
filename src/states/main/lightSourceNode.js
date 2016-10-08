@@ -54,11 +54,13 @@ class LightSourceNode extends Phaser.Sprite {
   static build(game, radius, angularSteps, radialSteps) {
     var rootChildNodes = [];
     
+    var radialStep = radius / radialSteps;
+
     for (var angle = 0; angle < 360; angle += 360 / angularSteps) {
       var childNode;
-      for (var r = radius; r > 0; r -= (radius / radialSteps)) {
-        var x = r * Math.cos(Math.PI * angle / 180);
-        var y = r * Math.sin(Math.PI * angle / 180);
+      for (var r = 0; r <= radius; r = r + radialStep) {
+        var x = radialStep * Math.cos(Math.PI * angle / 180);
+        var y = radialStep * Math.sin(Math.PI * angle / 180);
         childNode = new LightSourceNode(game, x, y, childNode === undefined ? [] : [childNode]);
       }
 
