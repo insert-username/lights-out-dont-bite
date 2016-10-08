@@ -16,15 +16,6 @@ module.exports = function(game, zDepthManager,
   game.physics.arcade.enable(this.lighting);
   this.lighting.body.immovable = true;
   zDepthManager.ceilingLighting.add(this.lighting);
-
-  /**
-   * The min and max alpha values for the lighting in this room.
-   */
-  this.lightingAlphaMin = 1.0;
-  this.lightingAlphaMax = 1.0;
-  this.lightingFlickerPeriodSeconds = 5;
-  game.time.events.loop(Phaser.Timer.SECOND * this.lightingFlickerPeriodSeconds / 50, this.updateLightingAlpha, this);
-  game.time.events.start();
 };
 
 module.exports.prototype.getLightingSprite = function() {
@@ -59,7 +50,7 @@ module.exports.State = {
 module.exports.State.Alpha = {
   LIT : 0.1,
   SEMI_LIT : 0.6,
-  UNLIT : 0.95
+  UNLIT : 1
 };
 
 /** Factory function for creating a room group. */
@@ -124,8 +115,8 @@ module.exports.prototype.setIllumination = function(state, x, y) {
         this.lighting.y, x, y);
 
     var alpha = Phaser.Math.clamp(
-       dist / 100,
-      0, 1);
+       dist / 50,
+      0.5, 0.9);
     this.setState(state, 500, alpha);
   } else {
     this.setState(state, 500);

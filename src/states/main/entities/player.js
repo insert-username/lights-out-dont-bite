@@ -31,7 +31,7 @@ module.exports = function(game, x, y) {
   this.health = module.exports.MaxHealth;
   this.controlsEnabled = true;
 
-  var lightingBoundsRadius = 50;
+  var lightingBoundsRadius = 40;
   this.lightingBounds = game.add.sprite(this.x, this.y);
   this.lightingBounds.anchor.setTo(0.5, 0.5);
   game.physics.arcade.enable(this.lightingBounds);

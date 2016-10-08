@@ -16,6 +16,9 @@ module.exports = function(game, player) {
   this.game = game;
   this.player = player;
   this.rooms = [];
+  this.roomSprites = [];
+
+  this.previouslyOverlappedRooms = [];
 };
 
 /**
@@ -23,6 +26,7 @@ module.exports = function(game, player) {
  */
 module.exports.prototype.addRoom = function(room) {
   this.rooms.push(room);
+  this.roomSprites.push(room.getLightingSprite());
 };
 
 /**
@@ -46,23 +50,22 @@ module.exports.prototype.getContainingRoom = function(sprite) {
 };
 
 module.exports.prototype.step = function() {
-  // all other semi-lit rooms will be darkened as the player
-  // has left them.
-  this.rooms.forEach(room => {
-    if (room.getIllumination() === Room.State.LIT) {
-      return;
-    }
-
-    var illuminated = false;
-    var lightingBounds = this.player.getLightingBounds();
-
-    this.game.physics.arcade.collide(lightingBounds, room.getLightingSprite(), (playerLighting, roomLighting) => {
-      room.setIllumination(Room.State.SEMI_LIT, lightingBounds.x, lightingBounds.y);
-      illuminated = true;
-    });
-
-    if (!illuminated) {
-      room.setIllumination(Room.State.UNLIT);
+  this.previouslyOverlappedRooms.forEach(r => {
+    if (r.getIllumination() != Room.State.LIT) {
+      r.setIllumination(Room.State.UNLIT);
     }
   });
+  this.previouslyOverlappedRooms = [];
+
+  this.game.physics.arcade.overlap(this.player.getLightingBounds(), this.roomSprites,
+    (playerLighting, roomLighting) => {
+      var i = this.roomSprites.indexOf(roomLighting);
+      var room = this.rooms[i];
+      this.previouslyOverlappedRooms.push(room);
+
+      if (room.getIllumination() == Room.State.LIT) {
+        return;
+      }
+      room.setIllumination(Room.State.SEMI_LIT, playerLighting.x, playerLighting.y);
+    });
 };

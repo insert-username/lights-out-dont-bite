@@ -70,22 +70,7 @@
          "draworder":"topdown",
          "height":0,
          "name":"Rooms",
-         "objects":[
-                {
-                 "height":112,
-                 "id":350,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"LIT",
-                 "visible":true,
-                 "width":96,
-                 "x":32,
-                 "y":16
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
