@@ -3,6 +3,7 @@ var NavMesh = require('./navMesh');
 
 var Player = require('./entities/player');
 var Nasty = require('./entities/nasty');
+var NastySpawner = require('./entities/nastySpawner');
 var Key = require('./entities/key');
 var Room = require('./entities/room');
 var Exit = require('./entities/exit');
@@ -12,8 +13,9 @@ var Note = require('./entities/note');
 /**
  * Imports a tiled map to create game objects.
  */
-module.exports = function(game, zDepth, map) {
+module.exports = function(game, triggerManager, zDepth, map) {
   this.game = game;
+  this.triggerManager = triggerManager;
   this.zDepth = zDepth;
   var mapRooms = module.exports.getObjectLayer(map, "Rooms");
   var mapNavMesh = module.exports.getObjectLayer(map, "Nav Mesh");
@@ -30,6 +32,7 @@ module.exports = function(game, zDepth, map) {
   this.roomManager = this.parseRooms(mapRooms, this.player);
   this.navMesh = this.parseNavMesh(mapNavMesh);
   this.enemies = this.parseEnemies(mapEnemySpawn, this.player, this.roomManager, this.navMesh);
+  this.enemySpawners = this.parseEnemySpawners(mapEnemySpawn, this.triggerManager, this.player, this.roomManager, this.navMesh);
   this.doors = this.parseDoors(mapDoors);
   this.notes = this.parseNotes(mapNotes, this.player, this.doors);
 };
@@ -162,11 +165,18 @@ module.exports.prototype.getEnemies = function() {
   return this.enemies;
 };
 
+/**
+ * Parses enemies placed on the map.
+ */
 module.exports.prototype.parseEnemies = function(mapEnemySpawn, player, roomManager, navMesh) {
   var result = [];
 
   for (var i = 0; i < mapEnemySpawn.length; i++) {
     var enemySpawnLocation = mapEnemySpawn[i];
+    if (enemySpawnLocation.name != undefined && enemySpawnLocation.name != "") {
+      continue;
+    }
+
     var x = enemySpawnLocation.x + enemySpawnLocation.width / 2;
     var y = enemySpawnLocation.y + enemySpawnLocation.height / 2;
 
@@ -177,6 +187,24 @@ module.exports.prototype.parseEnemies = function(mapEnemySpawn, player, roomMana
 
   return result;
 };
+
+/**
+ * Parses enemy spawners.
+ */
+module.exports.prototype.parseEnemySpawners = function(mapEnemySpawn, triggerManager, player, roomManager, navMesh) {
+  var result = [];
+
+  mapEnemySpawn
+    .filter(spawnPoint => spawnPoint.name != undefined && spawnPoint.name != "")
+    .forEach(spawnPoint => {
+      var x = spawnPoint.x + spawnPoint.width / 2;
+      var y = spawnPoint.y + spawnPoint.height / 2;
+      var nastySpawner = new NastySpawner(this.game, player, roomManager, navMesh, this.zDepth, x, y);
+      triggerManager.registerTriggerable(spawnPoint.name, nastySpawner);
+    });
+
+  return result;
+}
 
 module.exports.prototype.getExit = function() {
   if (this.exit === undefined) {
@@ -246,14 +274,14 @@ module.exports.prototype.parseNotes = function(mapNotes, player, doors) {
 
     var text = mapNote.properties.text;
     var opens = mapNote.properties["opens"];
-
+    var triggers = mapNote.properties["triggers"];
     var destinationMapName = mapNote.properties["triggers-map-transition"];
 
     var onReadCallback = () => {};
 
-    if (destinationMapName === undefined && opens === undefined) {
+    if (destinationMapName === undefined && opens === undefined && triggers === undefined) {
       // do nothing
-    } else if (destinationMapName === undefined) {
+    } else if (opens != undefined) {
       opens = opens.split(",")
         .map(name => name.trim())
         .filter(name => name != "");
@@ -267,11 +295,15 @@ module.exports.prototype.parseNotes = function(mapNotes, player, doors) {
 
           door.open();
         });
-    } else if (opens === undefined) {
+    } else if (destinationMapName != undefined) {
       onReadCallback = () =>
         {
           this.game.state.getCurrentState().triggerMapTransition(destinationMapName);
-        }
+        };
+    } else if (triggers != undefined) {
+      onReadCallback = () => {
+        this.triggerManager.trigger(triggers);
+      };
     } else {
       throw "Properties \"opens\" and \"triggers-map-transition\" are mutually exclusive.";
     }

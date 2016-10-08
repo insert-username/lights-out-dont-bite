@@ -1,6 +1,7 @@
 var ZDepth = require('./zDepth');
 var MapImporter = require('./mapImporter');
 var StressMeter = require('./stressMeter');
+var TriggerManager = require('./triggerManager');
 
 var Room = require('./entities/room');
 var Player = require('./entities/player');
@@ -85,7 +86,9 @@ module.exports = {
       zDepth.ceiling.add(ceilingLayer);
       zDepth.ceilingLighting.add(ceilingLightingLayer);
 
-      var mapImporter = new MapImporter(this.game, zDepth, map);
+      this.triggerManager = new TriggerManager();
+
+      var mapImporter = new MapImporter(this.game, this.triggerManager, zDepth, map);
       this.roomManager = mapImporter.getRoomManager();
       this.navMesh = mapImporter.getNavMesh();
       this.player = mapImporter.getPlayer();
