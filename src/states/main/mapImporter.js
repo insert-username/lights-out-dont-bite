@@ -13,7 +13,7 @@ var Note = require('./entities/note');
 /**
  * Imports a tiled map to create game objects.
  */
-module.exports = function(game, triggerManager, zDepth, map) {
+module.exports = function(game, wallLayer, triggerManager, zDepth, map) {
   this.game = game;
   this.triggerManager = triggerManager;
   this.zDepth = zDepth;
@@ -29,7 +29,7 @@ module.exports = function(game, triggerManager, zDepth, map) {
   this.player = this.parsePlayer(mapPlayerSpawn);
   this.exit = this.parseExit(mapExit);
   this.keys = this.parseKeys(this.player, mapKeys, this.exit);
-  this.roomManager = this.parseRooms(mapRooms, this.player);
+  this.roomManager = this.parseRooms(mapRooms, wallLayer, this.player);
   this.navMesh = this.parseNavMesh(mapNavMesh);
   this.enemies = this.parseEnemies(mapEnemySpawn, this.player, this.roomManager, this.navMesh);
   this.enemySpawners = this.parseEnemySpawners(mapEnemySpawn, this.triggerManager, this.player, this.roomManager, this.navMesh);
@@ -45,8 +45,8 @@ module.exports.prototype.getRoomManager = function() {
   return this.roomManager;
 }
 
-module.exports.prototype.parseRooms = function(rooms, torchSprite) {
-  var roomManager = new RoomManager(this.game, torchSprite);
+module.exports.prototype.parseRooms = function(rooms, wallLayer, torchSprite) {
+  var roomManager = new RoomManager(this.game, wallLayer, torchSprite);
   this.roomManager = roomManager;
 
   var game = this.game;

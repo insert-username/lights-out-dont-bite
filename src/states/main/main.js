@@ -84,8 +84,8 @@ module.exports = {
 
       this.triggerManager = new TriggerManager();
 
-      var mapImporter = new MapImporter(this.game, this.triggerManager, zDepth, map);
-      this.roomManager = mapImporter.getRoomManager();
+      var mapImporter = new MapImporter(this.game, this.wallLayer, this.triggerManager, zDepth, map);
+      this.roomManager = mapImporter.getRoomManager(this.wallLayer);
       this.navMesh = mapImporter.getNavMesh();
       this.player = mapImporter.getPlayer();
       this.keys = mapImporter.getKeys();
@@ -181,6 +181,8 @@ module.exports = {
           }
 
         }, this);
+
+        this.roomManager.lightSourceNode.flattenEnabled().forEach(n => this.game.debug.body(n))
 
         game.debug.body(this.player.getLightingBounds());
 

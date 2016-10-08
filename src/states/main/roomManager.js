@@ -1,4 +1,5 @@
 var Room = require('./entities/room');
+var LightSourceNode = require('./lightSourceNode');
 
 /**
  * Maintains the collection of rooms in the game and updates their
@@ -12,9 +13,12 @@ var Room = require('./entities/room');
  * containing this sprite that are otherwise unlit will have their lit
  * state set to SEMI_LIT. Lit rooms are not affected by the torch sprite.
  */
-module.exports = function(game, player) {
+module.exports = function(game, wallLayer, player) {
   this.game = game;
+  this.wallLayer = wallLayer;
   this.player = player;
+  this.lightSourceNode = LightSourceNode.build(game, 10, 10, 10);
+  this.player.addChild(this.lightSourceNode);
   this.rooms = [];
   this.roomSprites = [];
 
@@ -57,8 +61,18 @@ module.exports.prototype.step = function() {
   });
   this.previouslyOverlappedRooms = [];
 
-  this.game.physics.arcade.overlap(this.player.getLightingBounds(), this.roomSprites,
-    (playerLighting, roomLighting) => {
+  var allLightSourceNodes = this.lightSourceNode.flatten();
+  allLightSourceNodes.forEach(n => n.setColliding(false));
+  this.game.physics.arcade.collide(allLightSourceNodes, this.wallLayer, (lightingNode, wall) => {
+    lightingNode.setColliding(true);
+  });
+
+  var enabledLightSourceNodes = this.lightSourceNode.flattenEnabled();
+
+  console.log(this.wallLayer);
+
+  this.game.physics.arcade.overlap(enabledLightSourceNodes, this.roomSprites,
+    (node, roomLighting) => {
       var i = this.roomSprites.indexOf(roomLighting);
       var room = this.rooms[i];
       this.previouslyOverlappedRooms.push(room);
@@ -66,6 +80,6 @@ module.exports.prototype.step = function() {
       if (room.getIllumination() == Room.State.LIT) {
         return;
       }
-      room.setIllumination(Room.State.SEMI_LIT, playerLighting.x, playerLighting.y);
+      room.setIllumination(Room.State.SEMI_LIT, node.x, node.y);
     });
 };

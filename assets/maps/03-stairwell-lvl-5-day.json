@@ -146,8 +146,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":92,
-                 "y":68
+                 "x":56,
+                 "y":108
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -186,9 +186,9 @@
          "name":"Exit",
          "objects":[
                 {
-                 "height":12,
+                 "height":16,
                  "id":358,
-                 "name":"03-stairwell-lvl-5-day.json",
+                 "name":"03-floor-5-day.json",
                  "properties":
                     {
                      "keyCount":"0"
@@ -196,9 +196,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":48,
-                 "x":80,
-                 "y":116
+                 "width":16,
+                 "x":32,
+                 "y":48
                 }],
          "opacity":1,
          "type":"objectgroup",
