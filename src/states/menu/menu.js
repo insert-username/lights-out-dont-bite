@@ -2,7 +2,7 @@ module.exports = {
   preload: function () {
     // stops pixel interpolation on rendering.
     this.game.renderer.renderSession.roundPixels = true;
-    
+
     this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     this.game.scale.setUserScale(4, 4);
     this.game.scale.refresh();
@@ -27,7 +27,7 @@ module.exports = {
       this.game.camera.view.height / 2 + 80);
 
     this.game.input.keyboard.onDownCallback = function () {
-      this.game.state.start('main', true, true, { mapName: "00-floor-2-night.json" });
+      this.game.state.start('main', true, true, { mapName: "01-floor-3-night.json" });
       this.game.input.keyboard.onDownCallback = null;
     };
   },

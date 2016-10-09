@@ -5,7 +5,6 @@ var Player = require('./entities/player');
 var Nasty = require('./entities/nasty');
 var NastySpawner = require('./entities/nastySpawner');
 var Key = require('./entities/key');
-var Room = require('./entities/room');
 var Exit = require('./entities/exit');
 var Door = require('./entities/door');
 var Note = require('./entities/note');
@@ -29,7 +28,7 @@ module.exports = function(game, wallLayer, triggerManager, zDepth, map) {
   this.player = this.parsePlayer(mapPlayerSpawn);
   this.exit = this.parseExit(mapExit);
   this.keys = this.parseKeys(this.player, mapKeys, this.exit);
-  this.roomManager = this.parseRooms(mapRooms, wallLayer, this.player);
+  this.roomManager = this.parseRoomManager(mapRooms, wallLayer, this.player);
   this.navMesh = this.parseNavMesh(mapNavMesh);
   this.enemies = this.parseEnemies(mapEnemySpawn, this.player, this.roomManager, this.navMesh);
   this.enemySpawners = this.parseEnemySpawners(mapEnemySpawn, this.triggerManager, this.player, this.roomManager, this.navMesh);
@@ -45,21 +44,10 @@ module.exports.prototype.getRoomManager = function() {
   return this.roomManager;
 }
 
-module.exports.prototype.parseRooms = function(rooms, wallLayer, torchSprite) {
+module.exports.prototype.parseRoomManager = function(rooms, wallLayer, torchSprite) {
   var roomManager = new RoomManager(this.game, wallLayer, torchSprite);
   this.roomManager = roomManager;
-
-  var game = this.game;
-  var zDepth = this.zDepth;
-  rooms.forEach(function(room) {
-    var newRoom = Room.createRoom(game, zDepth,
-      room.navPointIndex,
-      room.x, room.y, room.width, room.height);
-
-    newRoom.setIllumination(room.type);
-    roomManager.addRoom(newRoom);
-  });
-
+  this.zDepth.ceilingLighting.add(roomManager);
   return roomManager;
 };
 

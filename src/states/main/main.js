@@ -3,7 +3,6 @@ var MapImporter = require('./mapImporter');
 var StressMeter = require('./stressMeter');
 var TriggerManager = require('./triggerManager');
 
-var Room = require('./entities/room');
 var Player = require('./entities/player');
 var Nasty = require('./entities/nasty');
 var Note = require('./entities/note');
@@ -28,7 +27,6 @@ module.exports = {
       var assetContext = require.context('../../../assets', true, /.*(.png|.json)$/);
 
       // load assets.
-      Room.load(this.game, assetContext);
       Nasty.load(this.game, assetContext);
 
       this.game.load.tilemap("map", assetContext('./maps/' + this.mapName), null, Phaser.Tilemap.TILED_JSON);
@@ -71,7 +69,7 @@ module.exports = {
       var ceilingLayer = map.createLayer('Ceiling');
 
       this.wallLayer.resizeWorld();
-      this.wallLayer.debug = this.debugMode;
+      // this.wallLayer.debug = this.debugMode;
       map.setCollisionBetween(0, 100, true, this.wallLayer);
 
       var zDepth = new ZDepth(this.game);
@@ -117,6 +115,8 @@ module.exports = {
       this.deathText.alpha = 0;
 
       this.subState = module.exports.SubStates.PLAYING;
+
+      this.roomManager.recalculateVisibleTiles();
     },
 
     triggerMapTransition: function(destinationMapName) {
@@ -141,8 +141,6 @@ module.exports = {
           this.triggerMapTransition(exit.getDestinationMapName());
         }, null, this);
       }
-
-      this.roomManager.step();
 
       if (!this.player.isAlive()) {
         this.player.disableControls();
@@ -182,9 +180,17 @@ module.exports = {
 
         }, this);
 
-        this.roomManager.lightSourceNode.flattenEnabled().forEach(n => this.game.debug.body(n))
+        // this.roomManager.lightSourceNode.traverse(n => {
+        //   var collidingTiles = this.wallLayer.getTiles(n.world.x, n.world.y, 1, 1);
+        //   if (collidingTiles.length != 0 && collidingTiles[0].index != -1) {
+        //     var t = collidingTiles[0];
+        //     this.game.debug.geom(new Phaser.Rectangle(t.x * 16, t.y * 16, t.width, t.height));
+        //     return false;
+        //   }
 
-        game.debug.body(this.player.getLightingBounds());
+        //   this.game.debug.body(n);
+        //   return true;
+        // });
 
         this.doors.forEach(d => game.debug.body(d));
       }

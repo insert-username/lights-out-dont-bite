@@ -1,5 +1,3 @@
-var Room = require('./room');
-
 /**
  * Defines an enemy which attacks the player if it is in the same room.
  * The nasty does not enter lit rooms.
@@ -36,8 +34,7 @@ module.exports = function(game, player, roomManager, navMesh, x, y) {
   this.path = [];
 
   this.navMeshFilterFunction = function(navPointIndex, navPointNode) {
-      var nodeRoom = roomManager.getContainingRoom(navPointNode);
-      return nodeRoom.getIllumination() != Room.State.LIT;
+    return true;
     };
 };
 
@@ -71,8 +68,6 @@ module.exports.prototype.constructor = module.exports;
  * Steps the AI for this entity.
  */
 module.exports.prototype.update = function() {
-  var containingRoom = this.roomManager.getContainingRoom(this);
-  var playerRoom = this.roomManager.getContainingRoom(this.player);
   var distanceToPlayer = Phaser.Math.distance(this.x, this.y, this.player.x, this.player.y);
 
   var currentNavPointIndex = this.navMesh.closestNavPointIndex(this.x, this.y);
@@ -82,7 +77,6 @@ module.exports.prototype.update = function() {
     this.player.damage(1);
   }
 
-  // if in the same room, always follow the player directly.
   if (this.canFollow(this.player)) {
     this.path = [ { x: this.player.x, y: this.player.y } ];
     this.state = module.exports.State.CHASING;
@@ -103,17 +97,12 @@ module.exports.prototype.update = function() {
   }
 };
 
-module.exports.prototype.isInSameRoom = function(player) {
-  return this.roomManager.getContainingRoom(player) ==
-    this.roomManager.getContainingRoom(this.body);
-};
 
 /**
  * @return true if the player can be followed between rooms.
  */
 module.exports.prototype.canFollow = function (player) {
-  return Phaser.Math.distance(this.body.x, this.body.y, player.x, player.y) < this.maxPlayerDistance &&
-    this.roomManager.getContainingRoom(player).getIllumination() != Room.State.LIT;
+  return Phaser.Math.distance(this.body.x, this.body.y, player.x, player.y) < this.maxPlayerDistance;
 };
 
 /**
@@ -141,12 +130,7 @@ module.exports.prototype.calculateWanderPath = function() {
     navPointIndex = navPointIndex + 1;
   }
 
-  var room = this.roomManager.getContainingRoom(this.navMesh.points[navPointIndex]);
-  if (room.getIllumination() != Room.State.LIT) {
-    return this.navMesh.getPath(currentNavPointIndex, navPointIndex, this.navMeshFilterFunction);
-  }
-
-  return [];
+  return this.navMesh.getPath(currentNavPointIndex, navPointIndex, this.navMeshFilterFunction);
 };
 
 module.exports.prototype.moveToNextNavPoint = function() {

@@ -30,14 +30,6 @@ module.exports = function(game, x, y) {
 
   this.health = module.exports.MaxHealth;
   this.controlsEnabled = true;
-
-  var lightingBoundsRadius = 40;
-  this.lightingBounds = game.add.sprite(this.x, this.y);
-  this.lightingBounds.anchor.setTo(0.5, 0.5);
-  game.physics.arcade.enable(this.lightingBounds);
-  this.lightingBounds.body.setCircle(lightingBoundsRadius, -lightingBoundsRadius / 2 - this.width / 2,
-    - lightingBoundsRadius / 2 - this.height / 4);
-  this.lightingBounds.body.immovable = true;
 }
 
 module.exports.MaxHealth = 100;
@@ -45,10 +37,6 @@ module.exports.key = "dave";
 
 module.exports.prototype = Object.create(Phaser.Sprite.prototype);
 module.exports.prototype.constructor = module.exports;
-
-module.exports.prototype.getLightingBounds = function() {
-  return this.lightingBounds;
-};
 
 module.exports.prototype.getHealth = function() {
   return this.health;
@@ -75,7 +63,6 @@ module.exports.prototype.setInteractiveEntity = function(interactiveEntity) {
 };
 
 module.exports.prototype.update = function() {
-  this.lightingBounds.position.setTo(this.x, this.y);
 
   // disable controls on death.
   if (!this.controlsEnabled) {
