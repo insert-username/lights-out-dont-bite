@@ -1,4 +1,4 @@
-var RoomManager = require('./roomManager');
+var Lighting = require('./lighting');
 var NavMesh = require('./navMesh');
 
 var Player = require('./entities/player');
@@ -28,27 +28,26 @@ module.exports = function(game, wallLayer, triggerManager, zDepth, map) {
   this.player = this.parsePlayer(mapPlayerSpawn);
   this.exit = this.parseExit(mapExit);
   this.keys = this.parseKeys(this.player, mapKeys, this.exit);
-  this.roomManager = this.parseRoomManager(mapRooms, wallLayer, this.player);
+  this.lighting = this.parseLighting(mapRooms, wallLayer, this.player);
   this.navMesh = this.parseNavMesh(mapNavMesh);
-  this.enemies = this.parseEnemies(mapEnemySpawn, this.player, this.roomManager, this.navMesh);
-  this.enemySpawners = this.parseEnemySpawners(mapEnemySpawn, this.triggerManager, this.player, this.roomManager, this.navMesh);
+  this.enemies = this.parseEnemies(mapEnemySpawn, this.player, this.lighting, this.navMesh);
+  this.enemySpawners = this.parseEnemySpawners(mapEnemySpawn, this.triggerManager, this.player, this.lighting, this.navMesh);
   this.doors = this.parseDoors(mapDoors);
   this.notes = this.parseNotes(mapNotes, this.player, this.doors);
 };
 
-module.exports.prototype.getRoomManager = function() {
-  if (this.roomManager == undefined) {
-    throw "The room manager has not been created yet.";
+module.exports.prototype.getLighting = function() {
+  if (this.lighting == undefined) {
+    throw "The lighting has not been created yet.";
   }
 
-  return this.roomManager;
+  return this.lighting;
 }
 
-module.exports.prototype.parseRoomManager = function(rooms, wallLayer, torchSprite) {
-  var roomManager = new RoomManager(this.game, wallLayer, torchSprite);
-  this.roomManager = roomManager;
-  this.zDepth.ceilingLighting.add(roomManager);
-  return roomManager;
+module.exports.prototype.parseLighting = function(rooms, wallLayer, torchSprite) {
+  var lighting = new Lighting(this.game, wallLayer, torchSprite);
+  this.zDepth.ceilingLighting.add(lighting);
+  return lighting;
 };
 
 module.exports.prototype.getNavMesh = function() {

@@ -83,7 +83,7 @@ module.exports = {
       this.triggerManager = new TriggerManager();
 
       var mapImporter = new MapImporter(this.game, this.wallLayer, this.triggerManager, zDepth, map);
-      this.roomManager = mapImporter.getRoomManager(this.wallLayer);
+      this.lighting = mapImporter.getLighting(this.wallLayer);
       this.navMesh = mapImporter.getNavMesh();
       this.player = mapImporter.getPlayer();
       this.keys = mapImporter.getKeys();
@@ -116,7 +116,7 @@ module.exports = {
 
       this.subState = module.exports.SubStates.PLAYING;
 
-      this.roomManager.recalculateVisibleTiles();
+      this.lighting.recalculateVisibleTiles();
     },
 
     triggerMapTransition: function(destinationMapName) {
@@ -179,19 +179,7 @@ module.exports = {
           }
 
         }, this);
-
-        // this.roomManager.lightSourceNode.traverse(n => {
-        //   var collidingTiles = this.wallLayer.getTiles(n.world.x, n.world.y, 1, 1);
-        //   if (collidingTiles.length != 0 && collidingTiles[0].index != -1) {
-        //     var t = collidingTiles[0];
-        //     this.game.debug.geom(new Phaser.Rectangle(t.x * 16, t.y * 16, t.width, t.height));
-        //     return false;
-        //   }
-
-        //   this.game.debug.body(n);
-        //   return true;
-        // });
-
+        
         this.doors.forEach(d => game.debug.body(d));
       }
     }

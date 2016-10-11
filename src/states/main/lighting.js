@@ -16,7 +16,7 @@ var recalculationFrequency = 2;
  * Maintains the collection of rooms in the game and updates their
  * state according to the location of lighting sprites.
  */
-class RoomManager extends Phaser.Sprite {
+class Lighting extends Phaser.Sprite {
 
   constructor(game, wallLayer, player) {
     var bitmap = game.make.bitmapData(game.camera.width + tileSize * 2,
@@ -183,4 +183,4 @@ class RoomManager extends Phaser.Sprite {
   }
 }
 
-module.exports = RoomManager;
+module.exports = Lighting;
