@@ -27,7 +27,7 @@ module.exports = {
       this.game.camera.view.height / 2 + 80);
 
     this.game.input.keyboard.onDownCallback = function () {
-      this.game.state.start('main', true, true, { mapName: "02-stairwell-lvl-4-night.json" });
+      this.game.state.start('main', true, true, { mapName: "03-stairwell-lvl-5-day.json" });
       this.game.input.keyboard.onDownCallback = null;
     };
   },

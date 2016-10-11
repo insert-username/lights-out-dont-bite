@@ -25,9 +25,18 @@ class Door extends Phaser.Sprite {
     this.visible = false;
   }
 
+  isOpen() {
+    return !this.visible;
+  }
+
   close() {
     this.body.enable = true;
     this.visible = true;
+  }
+
+  flipOpenState() {
+    this.body.enable = !this.body.enable;
+    this.visible = !this.visible;
   }
 
   static keyForRotation(rotation) {

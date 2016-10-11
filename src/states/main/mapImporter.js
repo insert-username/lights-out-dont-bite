@@ -1,5 +1,6 @@
 var Lighting = require('./lighting');
 var NavMesh = require('./navMesh');
+var DoorManager = require('./doorManager');
 
 var Player = require('./entities/player');
 var Nasty = require('./entities/nasty');
@@ -32,8 +33,10 @@ module.exports = function(game, wallLayer, triggerManager, zDepth, map) {
   this.navMesh = this.parseNavMesh(mapNavMesh);
   this.enemies = this.parseEnemies(mapEnemySpawn, this.player, this.lighting, this.navMesh);
   this.enemySpawners = this.parseEnemySpawners(mapEnemySpawn, this.triggerManager, this.player, this.lighting, this.navMesh);
+
   this.doors = this.parseDoors(mapDoors);
-  this.notes = this.parseNotes(mapNotes, this.player, this.doors);
+  this.doorManager = new DoorManager(this.doors);
+  this.notes = this.parseNotes(mapNotes, this.player, this.doors, this.doorManager);
 };
 
 module.exports.prototype.getLighting = function() {
@@ -262,46 +265,44 @@ module.exports.prototype.getDoors = function() {
   return this.doors;
 };
 
-module.exports.prototype.parseNotes = function(mapNotes, player, doors) {
+module.exports.prototype.parseNotes = function(mapNotes, player, doors, doorManager) {
   var result = [];
 
   mapNotes.forEach(mapNote => {
 
     var text = mapNote.properties.text;
     var opens = mapNote.properties["opens"];
+    var closes = mapNote.properties["closes"];
+    var flipsOpenState = mapNote.properties["flipsOpenState"];
     var triggers = mapNote.properties["triggers"];
     var destinationMapName = mapNote.properties["triggers-map-transition"];
 
-    var onReadCallback = () => {};
+    var condition = mapNote.properties["condition"];
 
-    if (destinationMapName === undefined && opens === undefined && triggers === undefined) {
-      // do nothing
-    } else if (opens != undefined) {
-      opens = opens.split(",")
-        .map(name => name.trim())
-        .filter(name => name != "");
-      onReadCallback = () =>
-        opens.forEach(doorName => {
-          var door = doors[doorName];
+    var onReadCallback = () => {
+      if (destinationMapName != undefined) {
+        this.game.state.getCurrentState().triggerMapTransition(destinationMapName);
+      }
 
-          if (door === undefined) {
-            throw "Unable to locate door with name :\"" + doorName + "\"";
-          }
+      if (flipsOpenState != undefined) {
+        doorManager.flip(flipsOpenState);
+      }
 
-          door.open();
-        });
-    } else if (destinationMapName != undefined) {
-      onReadCallback = () =>
-        {
-          this.game.state.getCurrentState().triggerMapTransition(destinationMapName);
+      if (opens != undefined) {
+        doorManager.open(opens);
+      }
+
+      if (closes != undefined) {
+        doorManager.close(closes);
+      }
+
+      if (triggers != undefined) {
+        onReadCallback = () => {
+          this.triggerManager.trigger(triggers);
         };
-    } else if (triggers != undefined) {
-      onReadCallback = () => {
-        this.triggerManager.trigger(triggers);
-      };
-    } else {
-      throw "Properties \"opens\" and \"triggers-map-transition\" are mutually exclusive.";
+      }
     }
+
 
     var sprite = mapNote.properties.sprite;
     sprite = sprite === undefined ?
@@ -309,6 +310,17 @@ module.exports.prototype.parseNotes = function(mapNotes, player, doors) {
       sprite;
 
     var note = new Note(this.game, sprite, mapNote.x, mapNote.y, player, text, onReadCallback);
+
+
+    if (condition === "allDoorsOpen") {
+       doorManager.addDoorStateChangeListener(d => {
+         note.visible = doorManager.isEveryDoorOpen();
+       });
+    } else if (condition === "!allDoorsOpen") {
+       doorManager.addDoorStateChangeListener(d => {
+         note.visible = !doorManager.isEveryDoorOpen();
+       });
+    }
 
     this.zDepth.floorItems.add(note);
 
