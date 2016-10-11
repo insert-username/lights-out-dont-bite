@@ -115,10 +115,10 @@ class RoomManager extends Phaser.Sprite {
    * coordinates.
    */
   hasLineOfSightToTileCorner(left, top, playerX, playerY, callback) {
-    var l = left + 1;
-    var r = left + tileSize - 1;
-    var t = top + 1;
-    var b = top + tileSize - 1;
+    var l = left;
+    var r = left + tileSize;
+    var t = top;
+    var b = top + tileSize;
 
     return this.hasLineOfSightToTile(l, t, playerX, playerY, callback) ||
       this.hasLineOfSightToTile(r, t, playerX, playerY, callback) ||
