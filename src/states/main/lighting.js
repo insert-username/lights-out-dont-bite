@@ -12,13 +12,27 @@ var lightingRange = 60;
  */
 var recalculationFrequency = 2;
 
+var Modes = {
+  
+  DAY: "DAY",
+  
+  NIGHT: "NIGHT",
+
+  DEFAULT: "DAY"
+}
+
+var baseBrightness = {
+  DAY: 0.95,
+  NIGHT: 0
+};
+
 /**
  * Maintains the collection of rooms in the game and updates their
  * state according to the location of lighting sprites.
  */
 class Lighting extends Phaser.Sprite {
 
-  constructor(game, wallLayer, player) {
+  constructor(game, wallLayer, player, mode) {
     var bitmap = game.make.bitmapData(game.camera.width + tileSize * 2,
       game.camera.height + tileSize * 2);
     super(game, 0, 0, bitmap);
@@ -28,6 +42,8 @@ class Lighting extends Phaser.Sprite {
     this.yResolution = game.camera.height / tileSize + 2;
     this.bitmap = bitmap;
     this.anchor.setTo(0, 0);
+
+    this.baseBrightness = baseBrightness[mode || Modes.DEFAULT];
 
     this.visibleTiles = {};
     this.update();
@@ -170,9 +186,9 @@ class Lighting extends Phaser.Sprite {
       alpha = Phaser.Math.distanceSq(xCoord + tileSize / 2, yCoord + tileSize / 2,
         lightSourceX, lightSourceY);
 
-      alpha = Phaser.Math.clamp(alpha / (lightingRange * lightingRange), 0, 1);
+      alpha = (1 -this.baseBrightness) * Phaser.Math.clamp(alpha / (lightingRange * lightingRange), 0, 1);
     } else {
-      alpha = 1;
+      alpha = 1 - this.baseBrightness;
     }
 
     this.bitmap.context.fillStyle = 'rgba(0, 0, 0, ' + alpha + ')';

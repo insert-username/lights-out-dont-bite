@@ -44,8 +44,16 @@ module.exports.prototype.getLighting = function() {
   return this.lighting;
 }
 
-module.exports.prototype.parseLighting = function(rooms, wallLayer, torchSprite) {
-  var lighting = new Lighting(this.game, wallLayer, torchSprite);
+module.exports.prototype.parseLighting = function(mapRooms, wallLayer, torchSprite) {
+  if (mapRooms.length > 1) {
+    throw "Layer \"Rooms\" expected to contain at most one object."; 
+  }
+  var room = mapRooms[0];
+  var lightingMode = room ?
+    room.properties["mode"] :
+    undefined;
+
+  var lighting = new Lighting(this.game, wallLayer, torchSprite, lightingMode);
   this.zDepth.ceilingLighting.add(lighting);
   return lighting;
 };
