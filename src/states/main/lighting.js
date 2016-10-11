@@ -3,7 +3,7 @@ var tileSize = 16;
 /**
  * The upper bound for lit tiles, in game unit distance from the player.
  */
-var lightingRange = 60;
+var lightingRange = 80;
 
 /**
  * Distance in unit tiles moved by the player after which a visible tile
@@ -87,10 +87,10 @@ class Lighting extends Phaser.Sprite {
   recalculateVisibleTiles() {
     this.visibleTiles = {};
 
-    for (var x = 0; x < this.xResolution; x++) {
-      for (var y = 0; y < this.yResolution; y++) {
-        var xCoord = (x - 1) * tileSize + this.x;
-        var yCoord = (y - 1) * tileSize + this.y;
+    for (var x = -1; x < this.xResolution - 1; x++) {
+      for (var y = -1; y < this.yResolution - 1; y++) {
+        var xCoord = x * tileSize + this.x;
+        var yCoord = y * tileSize + this.y;
         if (this.hasLineOfSightToTileCorner(xCoord, yCoord, this.player.x, this.player.y)) {
           this.setTileVisible(x, y);
         };
@@ -106,15 +106,9 @@ class Lighting extends Phaser.Sprite {
     this.visibleTiles[x + 1] = this.visibleTiles[x + 1] || {};
     this.visibleTiles[x - 1] = this.visibleTiles[x - 1] || {};
 
-    this.visibleTiles[y] = this.visibleTiles[y] || {};
-    this.visibleTiles[y + 1] = this.visibleTiles[y + 1] || {};
-    this.visibleTiles[y - 1] = this.visibleTiles[y - 1] || {};
-
     this.visibleTiles[x][y] = true;
-
     this.visibleTiles[x + 1][y] = true;
     this.visibleTiles[x - 1][y] = true;
-
     this.visibleTiles[x][y + 1] = true;
     this.visibleTiles[x][y - 1] = true;
   }
@@ -155,21 +149,19 @@ class Lighting extends Phaser.Sprite {
   /**
    * @return true if the playerX, and playerY coordinates have line of sight
    * to the tile on the specified x and y coordinates.
-   * @param x, y coordinates within the tile to check visibility for.
+   * @param x, y coordinates ON an edge face of the tile.
    */
   hasLineOfSightToTile(x, y, playerX, playerY) {
-    var startTile = this.wallLayer.getTiles(x, y, 1, 1)[0];
     var line = new Phaser.Line(x, y, playerX, playerY);
 
     var rayCastTiles = this.wallLayer.getRayCastTiles(line);
 
     for (var i = 0; i < rayCastTiles.length; i++) {
       var t = rayCastTiles[i];
-      if (t != startTile && t.index != -1) {
+      if (t.index != -1) {
         return false;
       }
     }
-
 
     return true;
   }
