@@ -1,6 +1,6 @@
 var tileSize = 16;
 
-var lightingRange = 50;
+var lightingRange = 60;
 
 /**
  * Maintains the collection of rooms in the game and updates their
@@ -67,9 +67,6 @@ class RoomManager extends Phaser.Sprite {
         var yCoord = (y - 1) * tileSize + this.y;
         this.hasLineOfSightToTileCorner(xCoord, yCoord, this.player.x, this.player.y, tile => {
           this.setTileVisible(x, y);
-          this.setTileVisible(x - 1, y);
-          this.setTileVisible(x, y - 1);
-          this.setTileVisible(x + 1, y);
         });
       }
     }
@@ -80,7 +77,20 @@ class RoomManager extends Phaser.Sprite {
    */
   setTileVisible(x, y) {
     this.visibleTiles[x] = this.visibleTiles[x] || {};
+    this.visibleTiles[x + 1] = this.visibleTiles[x + 1] || {};
+    this.visibleTiles[x - 1] = this.visibleTiles[x - 1] || {};
+
+    this.visibleTiles[y] = this.visibleTiles[y] || {};
+    this.visibleTiles[y + 1] = this.visibleTiles[y + 1] || {};
+    this.visibleTiles[y - 1] = this.visibleTiles[y - 1] || {};
+
     this.visibleTiles[x][y] = true;
+
+    this.visibleTiles[x + 1][y] = true;
+    this.visibleTiles[x - 1][y] = true;
+
+    this.visibleTiles[x][y + 1] = true;
+    this.visibleTiles[x][y - 1] = true;
   }
 
   /**
@@ -119,6 +129,7 @@ class RoomManager extends Phaser.Sprite {
   /**
    * @return true if the playerX, and playerY coordinates have line of sight
    * to the tile on the specified x and y coordinates.
+   * @param x, y coordinates within the tile to check visibility for.
    * @param callback callback function invoked if a clear line of sight is made.
    */
   hasLineOfSightToTile(x, y, playerX, playerY, callback) {
