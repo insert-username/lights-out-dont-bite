@@ -1,6 +1,16 @@
 var tileSize = 16;
 
+/**
+ * The upper bound for lit tiles, in game unit distance from the player.
+ */
 var lightingRange = 60;
+
+/**
+ * Distance in unit tiles moved by the player after which a visible tile
+ * recalculation should be performed. 1 = once per tile. 2 = twice per tile
+ * etc.
+ */
+var recalculationFrequency = 2;
 
 /**
  * Maintains the collection of rooms in the game and updates their
@@ -43,8 +53,8 @@ class RoomManager extends Phaser.Sprite {
    * updated if the call is made.
    */
   ifPlayerGridCoordsChanged(callback) {
-    var playerGridX = Phaser.Math.snapTo(this.player.x, tileSize);
-    var playerGridY = Phaser.Math.snapTo(this.player.y, tileSize);
+    var playerGridX = Phaser.Math.snapTo(this.player.x, tileSize / recalculationFrequency);
+    var playerGridY = Phaser.Math.snapTo(this.player.y, tileSize / recalculationFrequency);
 
     if (playerGridX != this.playerGridX || playerGridY != this.playerGridY) {
       callback();
