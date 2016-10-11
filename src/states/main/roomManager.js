@@ -20,11 +20,21 @@ class RoomManager extends Phaser.Sprite {
     this.anchor.setTo(0, 0);
 
     this.visibleTiles = {};
+    this.update();
   }
 
   update() {
+    this.snapToCamera();
     this.ifPlayerGridCoordsChanged(() => this.recalculateVisibleTiles());
     this.redraw();
+  }
+
+  /**
+   * Snaps the coordinates of the lighting to the grid coordinate nearest the camera.
+   */
+  snapToCamera() {
+    this.x = Phaser.Math.snapToFloor(this.game.camera.view.left - tileSize, tileSize);
+    this.y = Phaser.Math.snapToFloor(this.game.camera.view.top - tileSize, tileSize);
   }
 
   /**
@@ -49,8 +59,6 @@ class RoomManager extends Phaser.Sprite {
    * necessary (when the player's grid coordinates have changed).
    */
   recalculateVisibleTiles() {
-    this.x = Phaser.Math.snapToFloor(this.game.camera.view.left - tileSize, tileSize);
-    this.y = Phaser.Math.snapToFloor(this.game.camera.view.top - tileSize, tileSize);
     this.visibleTiles = {};
 
     for (var x = 0; x < this.xResolution; x++) {
