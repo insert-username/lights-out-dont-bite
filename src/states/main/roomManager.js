@@ -75,9 +75,9 @@ class RoomManager extends Phaser.Sprite {
       for (var y = 0; y < this.yResolution; y++) {
         var xCoord = (x - 1) * tileSize + this.x;
         var yCoord = (y - 1) * tileSize + this.y;
-        this.hasLineOfSightToTileCorner(xCoord, yCoord, this.player.x, this.player.y, tile => {
+        if (this.hasLineOfSightToTileCorner(xCoord, yCoord, this.player.x, this.player.y)) {
           this.setTileVisible(x, y);
-        });
+        };
       }
     }
   }
@@ -124,25 +124,24 @@ class RoomManager extends Phaser.Sprite {
    * have line of sight to the tile specified by the left and top
    * coordinates.
    */
-  hasLineOfSightToTileCorner(left, top, playerX, playerY, callback) {
+  hasLineOfSightToTileCorner(left, top, playerX, playerY) {
     var l = left;
     var r = left + tileSize;
     var t = top;
     var b = top + tileSize;
 
-    return this.hasLineOfSightToTile(l, t, playerX, playerY, callback) ||
-      this.hasLineOfSightToTile(r, t, playerX, playerY, callback) ||
-      this.hasLineOfSightToTile(l, b, playerX, playerY, callback) ||
-      this.hasLineOfSightToTile(r, b, playerX, playerY, callback);
+    return this.hasLineOfSightToTile(l, t, playerX, playerY) ||
+      this.hasLineOfSightToTile(r, t, playerX, playerY) ||
+      this.hasLineOfSightToTile(l, b, playerX, playerY) ||
+      this.hasLineOfSightToTile(r, b, playerX, playerY);
   }
 
   /**
    * @return true if the playerX, and playerY coordinates have line of sight
    * to the tile on the specified x and y coordinates.
    * @param x, y coordinates within the tile to check visibility for.
-   * @param callback callback function invoked if a clear line of sight is made.
    */
-  hasLineOfSightToTile(x, y, playerX, playerY, callback) {
+  hasLineOfSightToTile(x, y, playerX, playerY) {
     var startTile = this.wallLayer.getTiles(x, y, 1, 1)[0];
     var line = new Phaser.Line(x, y, playerX, playerY);
 
@@ -155,7 +154,6 @@ class RoomManager extends Phaser.Sprite {
       }
     }
 
-    rayCastTiles.forEach(t => callback(t));
 
     return true;
   }
