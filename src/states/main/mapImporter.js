@@ -49,7 +49,7 @@ module.exports.prototype.getLighting = function() {
 
 module.exports.prototype.parseLighting = function(mapRooms, wallLayer, torchSprite) {
   if (mapRooms.length > 1) {
-    throw "Layer \"Rooms\" expected to contain at most one object."; 
+    throw "Layer \"Rooms\" expected to contain at most one object.";
   }
   var room = mapRooms[0];
   var lightingMode = room ?
@@ -297,9 +297,11 @@ module.exports.prototype.parseNotes = function(mapNotes, player, doors, doorMana
       }
 
       if (triggers != undefined) {
-        onReadCallback = () => {
-          this.triggerManager.trigger(triggers);
-        };
+        triggers
+          .split(",")
+          .map(t => t.trim())
+          .filter(t => t != "")
+          .forEach(t => this.triggerManager.trigger(t));
       }
     }
 
