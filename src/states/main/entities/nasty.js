@@ -28,7 +28,7 @@ module.exports = function(game, player, roomManager, navMesh, x, y) {
   // the maximum distance at which to track the player.
   // if the player is further away than this distance, they
   // won't be followed.
-  this.maxPlayerDistance = 40;
+  this.maxPlayerDistance = 50;
 
   // array of x, y locations which are queued for movement.
   this.path = [];
@@ -82,21 +82,27 @@ module.exports.prototype.update = function() {
     this.state = module.exports.State.CHASING;
     this.moveToNextNavPoint();
     return;
+  } else if (this.state === module.exports.State.CHASING) {
+    this.path = [];
+    this.startWanderCooldown();
   } else if (this.path.length != 0) {
     this.moveToNextNavPoint();
   } else if (this.state != module.exports.State.WANDER_COOLDOWN) {
-    this.state = module.exports.State.WANDER_COOLDOWN;
-    this.game.time.events.add(Phaser.Timer.SECOND * this.wanderCooldown, function() {
-
-      var path = [];
-      while ((path = this.calculateWanderPath()).length < 2);
-
-      this.path = path;
-      this.state = module.exports.State.WANDERING;
-    }, this);
+    this.startWanderCooldown();
   }
 };
 
+module.exports.prototype.startWanderCooldown = function() {
+  this.state = module.exports.State.WANDER_COOLDOWN;
+  this.game.time.events.add(Phaser.Timer.SECOND * this.wanderCooldown, function() {
+
+    var path = [];
+    while ((path = this.calculateWanderPath()).length < 2);
+
+    this.path = path;
+    this.state = module.exports.State.WANDERING;
+  }, this);
+}
 
 /**
  * @return true if the player can be followed between rooms.
@@ -138,14 +144,14 @@ module.exports.prototype.moveToNextNavPoint = function() {
     return;
   }
 
-  var speed = this.state === module.exports.State.CHASING ?
-    this.runSpeed :
-    this.wanderSpeed;
-
   var destination = new Phaser.Point(this.path[0].x, this.path[0].y);
   var position = new Phaser.Point(this.body.center.x, this.body.center.y);
   var destinationDistance = Phaser.Math.distance(position.x, position.y,
     destination.x, destination.y);
+
+  var speed = this.state === module.exports.State.CHASING ?
+    this.runSpeed * Phaser.Math.clamp(1 - destinationDistance * destinationDistance / this.maxPlayerDistance, 0.1, 1) :
+    this.wanderSpeed;
 
   if (destinationDistance < 5) {
     this.path.splice(0, 1);
