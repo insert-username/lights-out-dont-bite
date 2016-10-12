@@ -13,18 +13,27 @@ var lightingRange = 80;
 var recalculationFrequency = 2;
 
 var Modes = {
-  
+
   DAY: "DAY",
-  
+
   NIGHT: "NIGHT",
+
+  MIDNIGHT: "MIDNIGHT",
 
   DEFAULT: "DAY"
 }
 
 var baseBrightness = {
   DAY: 0.95,
+  MIDNIGHT: 0,
   NIGHT: 0
 };
+
+var darkColor = {
+  DAY: { red: 0, green: 0, blue: 0 },
+  MIDNIGHT: { red: 50, green: 0, blue: 0 },
+  NIGHT: { red: 0, green: 0, blue: 0 }
+}
 
 /**
  * Maintains the collection of rooms in the game and updates their
@@ -44,6 +53,7 @@ class Lighting extends Phaser.Sprite {
     this.anchor.setTo(0, 0);
 
     this.baseBrightness = baseBrightness[mode || Modes.DEFAULT];
+    this.darkColor = darkColor[mode || Modes.DEFAULT];
 
     this.visibleTiles = {};
     this.update();
@@ -183,7 +193,10 @@ class Lighting extends Phaser.Sprite {
       alpha = 1 - this.baseBrightness;
     }
 
-    this.bitmap.context.fillStyle = 'rgba(0, 0, 0, ' + alpha + ')';
+    this.bitmap.context.fillStyle = 'rgba(' + this.darkColor.red + ', ' +
+      this.darkColor.green + ', ' +
+      this.darkColor.blue + ', ' + alpha + ')';
+
     this.bitmap.context.fillRect(
       x * tileSize,
       y * tileSize,
