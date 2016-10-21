@@ -9,6 +9,8 @@ module.exports = function(game, x, y) {
   this.game = game;
   Phaser.Sprite.call(this, game, x, y, module.exports.key);
   this.anchor.setTo(0.5, 0.5);
+  this.animations.add('stand', 0);
+  this.animations.add('walk', [1, 2, 3]);
 
   this.walkSpeed = 100.0;
   this.walkAcceleration = 1000;
@@ -68,6 +70,7 @@ module.exports.prototype.update = function() {
   if (!this.controlsEnabled) {
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
+    this.animations.play('stand');
     return;
   }
 
@@ -93,6 +96,16 @@ module.exports.prototype.update = function() {
 
   if (this.controls.down.isDown && !this.body.touching.down) {
     ddy += this.walkAcceleration;
+  }
+
+  console.log(this.animations);
+
+  if ((ddx != 0 || ddy != 0) && (this.animations.currentAnim.name != 'walk')) {
+    this.animations.stop();
+    this.animations.play('walk', 6, true);
+  } else if (ddx === 0 && ddy === 0) {
+    this.animations.stop();
+    this.animations.play('stand');
   }
 
   this.body.velocity.x = ddx;
