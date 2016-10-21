@@ -133,6 +133,8 @@ module.exports = {
 
       this.game.physics.arcade.collide(this.player, this.wallLayer);
       this.game.physics.arcade.collide(this.player, this.doors);
+      this.game.physics.arcade.collide(this.player, this.enemies);
+      this.game.physics.arcade.collide(this.enemies, this.doors);
       this.game.physics.arcade.collide(this.enemies, this.wallLayer);
       this.game.physics.arcade.collide(this.enemies, this.enemies);
 
@@ -179,7 +181,7 @@ module.exports = {
           }
 
         }, this);
-        
+
         this.doors.forEach(d => game.debug.body(d));
       }
     }
