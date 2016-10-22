@@ -23,6 +23,8 @@ module.exports = function(game, x, y, width, height, keyCount, destinationMapNam
   this.unlockText.cameraOffset.setTo(game.camera.view.width / 2, game.camera.view.height / 2);
   this.unlockText.visible = false;
   this.unlockText.alpha = 0;
+
+  this.unlockSound = this.game.add.sound('exit-unlocked', 1);
 };
 
 module.exports.prototype = Object.create(Phaser.Sprite.prototype);
@@ -52,9 +54,15 @@ module.exports.prototype.keyPickedUp = function() {
 
     show.chain(hide);
     show.start();
+    this.unlockSound.play();
   }
 };
 
 module.exports.prototype.isUnlocked = function() {
   return this.keyCount === 0;
 };
+
+module.exports.prototype.destroy = function() {
+  this.unlockSound.destroy();
+  Phaser.Sprite.prototype.destroy.call(this);
+}
