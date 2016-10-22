@@ -256,6 +256,22 @@
                  "width":0,
                  "x":256,
                  "y":244
+                }, 
+                {
+                 "height":0,
+                 "id":349,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"speaker",
+                     "text":"Freesound.org: Notif-1.mp3 by HTN4ever (https:\/\/www.freesound.org\/people\/HTN4ever\/)"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":280,
+                 "y":244
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -369,7 +385,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":349,
+ "nextobjectid":350,
  "orientation":"orthogonal",
  "properties":
     {
