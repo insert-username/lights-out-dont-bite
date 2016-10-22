@@ -33,7 +33,13 @@ var darkColor = {
   DAY: { red: 0, green: 0, blue: 0 },
   MIDNIGHT: { red: 50, green: 0, blue: 0 },
   NIGHT: { red: 0, green: 0, blue: 0 }
-}
+};
+
+var ambientSound = {
+  DAY: { name: 'office-ambience-day', volume: 0.1 },
+  MIDNIGHT: { name: 'office-ambience-night', volume: 0.3 },
+  NIGHT: { name: 'office-ambience-night', volume: 0.3 }
+};
 
 /**
  * Maintains the collection of rooms in the game and updates their
@@ -52,11 +58,16 @@ class Lighting extends Phaser.Sprite {
     this.bitmap = bitmap;
     this.anchor.setTo(0, 0);
 
-    this.baseBrightness = baseBrightness[mode || Modes.DEFAULT];
-    this.darkColor = darkColor[mode || Modes.DEFAULT];
+    mode = mode || Modes.DEFAULT;
+
+    this.baseBrightness = baseBrightness[mode];
+    this.darkColor = darkColor[mode];
 
     this.visibleTiles = {};
     this.update();
+
+    this.ambientSound = this.game.add.sound(ambientSound[mode].name, ambientSound[mode].volume, true);
+    this.ambientSound.play();
   }
 
   update() {
@@ -201,6 +212,11 @@ class Lighting extends Phaser.Sprite {
       x * tileSize,
       y * tileSize,
       tileSize, tileSize);
+  }
+
+  destroy() {
+    this.ambientSound.destroy();
+    super.destroy();
   }
 }
 

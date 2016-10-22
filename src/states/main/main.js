@@ -32,7 +32,7 @@ module.exports = {
       this.game.scale.refresh();
       this.game.stage.backgroundColor = '#000000';
 
-      var assetContext = require.context('../../../assets', true, /.*(\.png|\.json|\.mp3)$/);
+      var assetContext = require.context('../../../assets', true, /.*(\.png|\.json|\.mp3|\.wav)$/);
 
       // load assets.
       Nasty.load(this.game, assetContext);
@@ -58,6 +58,8 @@ module.exports = {
       this.game.load.image('speaker', assetContext('./sprites/speaker.png'));
 
       this.game.load.audio('nasty-ambience', assetContext('./sounds/243045__phinster__cicada-with-dog.mp3'));
+      this.game.load.audio('office-ambience-day', assetContext('./sounds/168596__zabuhailo__office-refrigerator.wav'));
+      this.game.load.audio('office-ambience-night', assetContext('./sounds/182872__klankbeeld__nightcity-hum-01-130212.wav'));
     },
 
     create: function() {
