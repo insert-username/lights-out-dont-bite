@@ -46,6 +46,9 @@ module.exports = function(game, key, x, y, player,
   
   this.flashTween = game.add.tween(this.overlaySprite)
     .to({ alpha: 1 }, 500, Phaser.Easing.Linear.None, true, 0, -1, true);
+
+  this.interactionSound = this.game.add.sound('interact', 0.7);
+  this.interactionSound.allowMultiple = false;
 };
 
 module.exports.prototype = Object.create(Phaser.Sprite.prototype);
@@ -80,6 +83,10 @@ module.exports.prototype.update = function() {
  * Triggers the interaction callback to be called.
  */
 module.exports.prototype.interact = function() {
+    if (!this.interactionSound.isPlaying) {
+      this.interactionSound.play();
+    }
+
     this.player.setInteractiveEntity();
     var shouldDestroy = !this.onInteract.call(this.onInteractContext);
 
