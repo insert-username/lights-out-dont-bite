@@ -1,3 +1,5 @@
+var WalkingEntity = require('./walkingEntity');
+
 /**
  * Defines the player character.
  * The player can be in one of two states: Alive and Dead. If dead, the player will
@@ -7,13 +9,14 @@
  */
 module.exports = function(game, x, y) {
   this.game = game;
-  Phaser.Sprite.call(this, game, x, y, module.exports.key);
+  WalkingEntity.call(this, game, x, y, module.exports.key, {
+    idle: { frames: [0], fps: 1 },
+    walkDown: { frames: [1, 2, 3], fps: 6 },
+    walkUp: { frames: [4, 5, 6], fps: 6 },
+    walkLeft: { frames: [10, 11, 12], fps: 6 },
+    walkRight: { frames: [7, 8, 9], fps: 6 },
+  });
   this.anchor.setTo(0.5, 0.5);
-  this.animations.add('stand', [0]);
-  this.animations.add('walk-down', [1, 2, 3], 6, true);
-  this.animations.add('walk-up', [4, 5, 6], 6, true);
-  this.animations.add('walk-right', [7, 8, 9], 6, true);
-  this.animations.add('walk-left', [10, 11, 12], 6, true);
 
   this.walkSpeed = 80.0;
   this.walkAcceleration = 1000;
@@ -40,7 +43,7 @@ module.exports = function(game, x, y) {
 module.exports.MaxHealth = 100;
 module.exports.key = "dave";
 
-module.exports.prototype = Object.create(Phaser.Sprite.prototype);
+module.exports.prototype = Object.create(WalkingEntity.prototype);
 module.exports.prototype.constructor = module.exports;
 
 module.exports.prototype.getHealth = function() {
@@ -101,31 +104,7 @@ module.exports.prototype.update = function() {
     ddy += this.walkAcceleration;
   }
 
-  if (ddx > 0) {
-    this.setAnimation('walk-right');
-  } else if (ddx < 0) {
-    this.setAnimation('walk-left');
-  } else if (ddy > 0) {
-    this.setAnimation('walk-down');
-  } else if (ddy < 0) {
-    this.setAnimation('walk-up');
-  } else {
-    this.setAnimation('stand');
-  }
-
   this.body.velocity.x = ddx;
   this.body.velocity.y = ddy;
-}
-
-/**
- * Sets the current animation to the animation specified by animationName,
- * unless that animation is currently playing. If the animation is currently
- * playing, no action is taken.
- */
-module.exports.prototype.setAnimation = function(animationName) {
-  var currentAnimationName = this.animations.currentAnim.name;
-
-  if (currentAnimationName != animationName) {
-    this.animations.play(animationName);
-  }
+  this.setAnimationToBodyState();
 }

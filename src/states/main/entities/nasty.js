@@ -1,3 +1,5 @@
+var WalkingEntity = require('./walkingEntity');
+
 /**
  * Defines an enemy which attacks the player if it is in the same room.
  * The nasty does not enter lit rooms.
@@ -6,7 +8,14 @@
  * a queue of coordinates is set which the enemy will attempt to move to.
  */
 module.exports = function(game, player, roomManager, navMesh, x, y) {
-  Phaser.Sprite.call(this, game, x, y, module.exports.key);
+  WalkingEntity.call(this, game, x, y, module.exports.key, {
+    idle: { frames: [0, 1, 2, 3, 4, 5, 6 , 7], fps: 1 },
+    walkDown: { frames: [26, 27, 28, 29, 30], fps: 5 },
+    walkUp: { frames: [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41], fps: 5 },
+    walkLeft: { frames: [17, 18, 19, 20, 21, 22, 23, 24, 25], fps: 5 },
+    walkRight: { frames: [8, 9, 10, 11, 12, 13, 14, 15, 16], fps: 5 },
+  });
+
   this.game = game;
   this.player = player;
   this.anchor.setTo(0.5, 0.5);
@@ -58,10 +67,10 @@ module.exports.State = {
 
 module.exports.key = "nasty";
 module.exports.load = function(game, assetContext) {
-  game.load.spritesheet(module.exports.key, assetContext("./sprites/nasty.png"), 50, 50);
+  game.load.spritesheet(module.exports.key, assetContext("./sprites/nasty.png"), 16, 32);
 };
 
-module.exports.prototype = Object.create(Phaser.Sprite.prototype);
+module.exports.prototype = Object.create(WalkingEntity.prototype);
 module.exports.prototype.constructor = module.exports;
 
 /**
@@ -90,6 +99,8 @@ module.exports.prototype.update = function() {
   } else if (this.state != module.exports.State.WANDER_COOLDOWN) {
     this.startWanderCooldown();
   }
+
+  this.setAnimationToBodyState();
 };
 
 module.exports.prototype.startWanderCooldown = function() {
