@@ -90,7 +90,6 @@ module.exports.prototype.update = function() {
     this.path = [ { x: this.player.x, y: this.player.y } ];
     this.state = module.exports.State.CHASING;
     this.moveToNextNavPoint();
-    return;
   } else if (this.state === module.exports.State.CHASING) {
     this.path = [];
     this.startWanderCooldown();
