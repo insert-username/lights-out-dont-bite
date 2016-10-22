@@ -24,6 +24,14 @@ module.exports = {
     },
 
     preload: function() {
+      // stops pixel interpolation on rendering.
+      this.game.renderer.renderSession.roundPixels = true;
+
+      this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+      this.game.scale.setUserScale(4, 4);
+      this.game.scale.refresh();
+      this.game.stage.backgroundColor = '#000000';
+
       var assetContext = require.context('../../../assets', true, /.*(.png|.json)$/);
 
       // load assets.
@@ -35,6 +43,7 @@ module.exports = {
       this.game.load.image('buzzer', assetContext('./sprites/buzzer.png'));
       this.game.load.spritesheet('dave', assetContext('./sprites/dave.png'), 16, 32);
       this.game.load.image('floor', assetContext('./tilesets/office-floor.png'));
+      this.game.load.image('menu', assetContext('./tilesets/menu.png'));
       this.game.load.image('floor-items', assetContext('./tilesets/floor-items.png'));
       this.game.load.image('office-divider', assetContext('./tilesets/office-divider.png'));
       this.game.load.image('window', assetContext('./tilesets/window.png'));
@@ -52,6 +61,7 @@ module.exports = {
       var map = this.game.add.tilemap('map');
       this.map = map;
 
+      map.addTilesetImage('menu', 'menu');
       map.addTilesetImage('floor', 'floor');
       map.addTilesetImage('office-divider', 'office-divider');
       map.addTilesetImage('floor-items', 'floor-items');
