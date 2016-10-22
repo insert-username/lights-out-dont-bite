@@ -9,10 +9,13 @@ module.exports = function(game, x, y) {
   this.game = game;
   Phaser.Sprite.call(this, game, x, y, module.exports.key);
   this.anchor.setTo(0.5, 0.5);
-  this.animations.add('stand', 0);
-  this.animations.add('walk', [1, 2, 3]);
+  this.animations.add('stand', [0]);
+  this.animations.add('walk-down', [1, 2, 3], 6, true);
+  this.animations.add('walk-up', [4, 5, 6], 6, true);
+  this.animations.add('walk-right', [7, 8, 9], 6, true);
+  this.animations.add('walk-left', [10, 11, 12], 6, true);
 
-  this.walkSpeed = 100.0;
+  this.walkSpeed = 80.0;
   this.walkAcceleration = 1000;
   game.physics.arcade.enable(this);
   this.body.collideWorldBounds = true;
@@ -70,7 +73,7 @@ module.exports.prototype.update = function() {
   if (!this.controlsEnabled) {
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
-    this.animations.play('stand');
+    this.setAnimation('stand');
     return;
   }
 
@@ -98,16 +101,31 @@ module.exports.prototype.update = function() {
     ddy += this.walkAcceleration;
   }
 
-  console.log(this.animations);
-
-  if ((ddx != 0 || ddy != 0) && (this.animations.currentAnim.name != 'walk')) {
-    this.animations.stop();
-    this.animations.play('walk', 6, true);
-  } else if (ddx === 0 && ddy === 0) {
-    this.animations.stop();
-    this.animations.play('stand');
+  if (ddx > 0) {
+    this.setAnimation('walk-right');
+  } else if (ddx < 0) {
+    this.setAnimation('walk-left');
+  } else if (ddy > 0) {
+    this.setAnimation('walk-down');
+  } else if (ddy < 0) {
+    this.setAnimation('walk-up');
+  } else {
+    this.setAnimation('stand');
   }
 
   this.body.velocity.x = ddx;
   this.body.velocity.y = ddy;
+}
+
+/**
+ * Sets the current animation to the animation specified by animationName,
+ * unless that animation is currently playing. If the animation is currently
+ * playing, no action is taken.
+ */
+module.exports.prototype.setAnimation = function(animationName) {
+  var currentAnimationName = this.animations.currentAnim.name;
+
+  if (currentAnimationName != animationName) {
+    this.animations.play(animationName);
+  }
 }
