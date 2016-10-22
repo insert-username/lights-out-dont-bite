@@ -25,6 +25,9 @@ module.exports = function(game, player, enemies) {
   this.maxAlpha = 0;
 
   this.detectionRange = 200;
+
+  this.ambientSound = this.game.add.audio('nasty-ambience', 0, true);
+  this.ambientSound.play();
 };
 
 module.exports.prototype = Object.create(Phaser.Sprite.prototype);
@@ -42,4 +45,10 @@ module.exports.prototype.update = function() {
   this.alpha = closestEnemyDistance < this.detectionRange && closestEnemyDistance != -1 ?
     (this.detectionRange - closestEnemyDistance) / this.detectionRange :
     0;
+  this.ambientSound.volume = this.alpha;
 };
+
+module.exports.prototype.destroy = function() {
+  Phaser.Sprite.prototype.destroy.call(this);
+  this.ambientSound.destroy();
+}

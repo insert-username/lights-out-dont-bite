@@ -8,7 +8,7 @@ module.exports = {
     loaders: [
       { test: /pixi.js/, loader: 'script' },
       { test: /phaser.js/, loader: 'script' },
-      { test: /\.json$/, loader: 'file' },
+      { test: /(\.json|\.mp3)$/, loader: 'file' },
       { test: /\.js$/, loader: 'babel?presets[]=es2015', exclude: /(node_modules|lib)/ },
       {
           test: /\.(jpe?g|png|gif|svg)$/i,
