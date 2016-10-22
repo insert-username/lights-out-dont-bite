@@ -137,7 +137,7 @@
                  "properties":
                     {
                      "isOpen":"false",
-                     "rotation":"0"
+                     "rotation":"-90"
                     },
                  "rotation":0,
                  "type":"",
@@ -153,7 +153,7 @@
                  "properties":
                     {
                      "isOpen":"false",
-                     "rotation":"0"
+                     "rotation":"-90"
                     },
                  "rotation":0,
                  "type":"",
@@ -185,7 +185,7 @@
                  "properties":
                     {
                      "isOpen":"false",
-                     "rotation":"0"
+                     "rotation":"-90"
                     },
                  "rotation":0,
                  "type":"",
