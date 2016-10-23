@@ -16,6 +16,7 @@ module.exports = function(game, x, y) {
     walkLeft: { frames: [10, 11, 12], fps: 6 },
     walkRight: { frames: [7, 8, 9], fps: 6 },
   });
+  this.animations.add('death', [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 16);
   this.anchor.setTo(0.5, 0.5);
 
   this.walkSpeed = 80.0;
@@ -78,7 +79,12 @@ module.exports.prototype.update = function() {
   if (!this.controlsEnabled) {
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
-    this.setAnimation('stand');
+
+    if (this.isAlive()) {
+      this.setAnimation('stand');
+    } else {
+      this.setAnimation('death');
+    }
     return;
   }
 

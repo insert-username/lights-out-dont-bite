@@ -1634,6 +1634,7 @@
 	    walkLeft: { frames: [10, 11, 12], fps: 6 },
 	    walkRight: { frames: [7, 8, 9], fps: 6 }
 	  });
+	  this.animations.add('death', [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 16);
 	  this.anchor.setTo(0.5, 0.5);
 
 	  this.walkSpeed = 80.0;
@@ -1696,7 +1697,12 @@
 	  if (!this.controlsEnabled) {
 	    this.body.velocity.x = 0;
 	    this.body.velocity.y = 0;
-	    this.setAnimation('stand');
+
+	    if (this.isAlive()) {
+	      this.setAnimation('stand');
+	    } else {
+	      this.setAnimation('death');
+	    }
 	    return;
 	  }
 
@@ -2870,7 +2876,7 @@
 /* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "7ddc8b24a1d6e0a6f9973462d65d6250.png";
+	module.exports = __webpack_require__.p + "6a95af889aeb86bba7a86babe285d489.png";
 
 /***/ },
 /* 63 */
