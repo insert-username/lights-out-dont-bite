@@ -169,7 +169,7 @@
                  "name":"",
                  "properties":
                     {
-                     "opens":"A1, A2, A3",
+                     "opens":"A1",
                      "text":"Huh, that's weird. Sounds like there's someone else around here. Better be quiet."
                     },
                  "rotation":0,
@@ -181,7 +181,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":0,
          "x":0,
          "y":0
