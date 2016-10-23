@@ -62,6 +62,7 @@ module.exports = {
       this.game.load.audio('office-ambience-night', assetContext('./sounds/182872__klankbeeld__nightcity-hum-01-130212.mp3'));
       this.game.load.audio('exit-unlocked', assetContext('./sounds/346425__soneproject__ecofuture3.mp3'));
       this.game.load.audio('interact', assetContext('./sounds/240943__htn4ever__notif-1.mp3'));
+      this.game.load.audio('player-walk', assetContext('./sounds/189640__yuval__grass-loop-short.mp3'));
     },
 
     create: function() {

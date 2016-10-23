@@ -272,6 +272,22 @@
                  "width":0,
                  "x":280,
                  "y":244
+                }, 
+                {
+                 "height":0,
+                 "id":350,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"speaker",
+                     "text":"Freesound.org: grass loop short.wav by Yuval (https:\/\/www.freesound.org\/people\/Yuval\/)"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":304,
+                 "y":244
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -385,7 +401,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":350,
+ "nextobjectid":351,
  "orientation":"orthogonal",
  "properties":
     {

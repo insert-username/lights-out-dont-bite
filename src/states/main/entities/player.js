@@ -38,6 +38,8 @@ module.exports = function(game, x, y) {
 
   this.health = module.exports.MaxHealth;
   this.controlsEnabled = true;
+
+  this.walkSound = this.game.add.sound('player-walk', 1);
 }
 
 module.exports.MaxHealth = 100;
@@ -107,4 +109,17 @@ module.exports.prototype.update = function() {
   this.body.velocity.x = ddx;
   this.body.velocity.y = ddy;
   this.setAnimationToBodyState();
+
+  if (ddx != 0 || ddy != 0) {
+    if (!this.walkSound.isPlaying) {
+      this.walkSound.play();
+    }
+  } else {
+    this.walkSound.stop();
+  }
+}
+
+module.exports.prototype.destroy = function() {
+  this.walkSound.destroy();
+  Phaser.Sprite.prototype.destroy.call(this);
 }
