@@ -2440,7 +2440,7 @@
 	  }, {
 	    key: 'textStyle',
 	    value: function textStyle(game) {
-	      return { font: '8px monospace', fill: "white", wordWrap: true, wordWrapWidth: game.camera.width - 8 };
+	      return { font: '8px monospace', fill: "white", backgroundColor: 'black', wordWrap: true, wordWrapWidth: game.camera.width - 8 };
 	    }
 	  }]);
 
